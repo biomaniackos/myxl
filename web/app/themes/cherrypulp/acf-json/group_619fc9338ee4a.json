@@ -1,0 +1,89 @@
+{
+    "key": "group_619fc9338ee4a",
+    "title": "Hero",
+    "fields": [
+        {
+            "key": "field_619fc93397ad7",
+            "label": "Hero",
+            "name": "hero",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_619fc9339bd4c",
+                    "label": "Titre",
+                    "name": "title",
+                    "type": "wysiwyg",
+                    "instructions": "Utilisé les balises <strong> pour surligner votre texte\r\n<br>\r\n<br>\r\n1) sélectionner votre mot\r\n<br>\r\n2) cliquer sur [ b ]\r\n<br>\r\n<br>\r\nexemple: <strong>mon mot<\/strong",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "wpml_cf_preferences": 0,
+                    "default_value": "",
+                    "tabs": "visual",
+                    "toolbar": "very_simple",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_619fc9339bd55",
+                    "label": "Texte",
+                    "name": "text",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "maxlength": "",
+                    "rows": "",
+                    "new_lines": "",
+                    "wpml_cf_preferences": 0
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "template-blocks.blade.php"
+            }
+        ],
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "acf-options-activities-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1640097733
+}

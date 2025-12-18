@@ -1,0 +1,49 @@
+body.admin-bar {
+    .app-header {
+        top: 32px;
+    }
+}
+
+.container {
+    @apply container mx-auto py-10 px-5;
+}
+
+.container-wide {
+    @apply w-full max-w-6xl mx-auto py-10 px-5 xl:max-w-7xl;
+}
+
+.container-full {
+    @apply max-w-full mx-auto py-10 px-5;
+
+    @media (min-width: theme('screens.lg')) {
+        margin-left: calc((100% - 100vw) / 2);
+        margin-right: calc((100% - 100vw) / 2);
+    }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.app {
+    @apply relative overflow-hidden;
+
+    &-header {
+        @apply fixed left-0 right-0 top-0 z-50;
+    }
+
+    &-body {
+        padding-top: 72px;
+        @media (min-width: theme('screens.md')) {
+            padding-top: 96px;
+        }
+
+        &.background {
+            background-color: #F6F6F4;
+        }
+    }
+
+    &-footer {
+        @apply bg-gray-800;
+    }
+}

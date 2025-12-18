@@ -1,0 +1,115 @@
+.card-activity {
+    @apply relative bg-primary-400 h-0 transition;
+    padding-top: 82%;
+    border-radius: 20px;
+
+    & .card-wrapper {
+        @apply absolute top-0 left-0 w-full h-full flex flex-col justify-between;
+        padding: 13%;
+    }
+
+    & .image-wrapper {
+        @apply object-contain;
+        width: 48%;
+        height: 48%;
+    }
+    & .icon,
+    & .icon-color {
+        @apply w-full h-full object-contain m-0 transition;
+    }
+    & .icon-color {
+        @apply opacity-0 hidden;
+    }
+    & h2 {
+        @apply text-white font-bold transition;
+        font-size: 20px;
+        font-size: 1.25rem;
+        line-height: 1.2;
+    }
+
+    &.small {
+        & h2 {
+            font-size: 20px;
+            font-size: 1.25rem;
+        }
+    }
+
+    @media (min-width: theme('screens.md')) {
+        & h2 {
+            font-size: 28px;
+            font-size: 1.75rem;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        @apply shadow-md;
+        background-color: #FFFFFF !important;
+        & .icon {
+            @apply opacity-0 hidden;
+        }
+        & .icon-color {
+            @apply opacity-100 block;
+        }
+
+        & h2 {
+            color: var(--data-color);
+        }
+
+        & svg {
+            & circle {
+                fill: var(--data-color);
+            }
+            & path {
+                stroke: #FFFFFF;
+            }
+        }
+    }
+
+    & a {
+        @apply absolute block overflow-hidden top-0 left-0 w-full h-full opacity-0 z-10;
+        white-space: nowrap;
+        text-indent: 99999px;
+    }
+
+
+    /* negative color */
+    &.negative {
+        @apply bg-white;
+        & h2 {
+            color: var(--data-color);
+        }
+
+        & .icon-color {
+            @apply opacity-100 block;
+        }
+        & .icon {
+            @apply opacity-0 hidden;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: var(--data-color)!important;
+
+            & h2 {
+                @apply text-white;
+            }
+
+            & .icon-color {
+                @apply opacity-0 hidden;
+            }
+            & .icon {
+                @apply opacity-100 block;
+            }
+
+            & svg {
+                & circle {
+                    fill: #FFFFFF;
+                }
+                & path {
+                    stroke: var(--data-color);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.section-cta {
+    @apply flex flex-col justify-center;
+    @apply bg-gray-500 bg-center bg-cover bg-no-repeat;
+    background-image: attr(data-image url);
+    min-height: 40vh;
+
+    .section-cta-wrapper {
+        @apply max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8;
+    }
+
+    .section-cta-body {
+        @apply mt-4 text-lg text-white;
+    }
+
+    .section-cta-title {
+        @apply text-3xl font-extrabold text-white sm:text-4xl text-white;
+    }
+}

@@ -1,0 +1,8 @@
+.menu-social {
+    @apply flex space-x-6;
+
+    svg {
+        @apply h-6 w-6 !important;
+    }
+}
+

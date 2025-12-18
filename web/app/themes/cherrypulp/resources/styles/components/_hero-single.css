@@ -1,0 +1,88 @@
+.hero-single {
+    @apply relative grid grid-cols-12 gap-0 overflow-hidden;
+    height: 55vh;
+
+    & .wrapper-content {
+        @apply col-span-12 lg:col-span-4 relative flex justify-center items-center py-5 pt-20 lg:pt-5;
+        background-color: #F6F6F5;
+
+        & .back {
+            @apply absolute block top-10 left-10 no-underline text-primary-800 pl-7;
+            &::before {
+                @apply absolute block w-3 h-3 left-1;
+                content: "";
+                background: url('../images/arrow.png')no-repeat center;
+                background-size: 90%;
+                top: calc(50% - 6px);
+                transform: rotate(180deg);
+            }
+        }
+
+        & h2 {
+            @apply break-words;
+            /* word-break: break-all; */
+        }
+        & strong {
+            @apply text-white bg-primary-400;
+            background-color: var(--data-color);
+        }
+    }
+    & .wrapper-image {
+        @apply relative col-span-12 lg:col-span-8 overflow-hidden;
+        & img {
+            @apply object-cover w-full h-full;
+        }
+
+        & .icon {
+            @apply absolute flex justify-center items-center bottom-10 right-10 w-36 h-36 rounded-full overflow-hidden;
+            background-color: var(--data-color);
+            & img {
+                @apply object-contain w-3/5 h-3/5;
+            }
+        }
+    }
+
+    & .elem-scene {
+        @apply absolute w-full h-full top-0 left-0 z-0;
+    
+        /* cube(s) */
+        & .elem_cube {
+            &-01 {
+                width: 102px; height: 90px;
+                left: auto !important; top: auto !important;
+                top: 70% !important; left: -2% !important;
+            }
+        }
+    
+        /* dot(s) */
+        & .elem_dot {
+            @apply block w-4 h-4 rounded-full;
+            &-01 {
+                left: auto !important; top: auto !important;
+                bottom:37% !important; left:2% !important;
+            }
+            &-02 {
+                left: auto !important; top: auto !important;
+                bottom:7% !important; left:9% !important;
+            }
+        }
+    
+        /* triangle(s) */
+        & .elem_triangle {
+            &-01 {
+                width: 90px; height: 100px;
+                left: auto !important; top: auto !important;
+                top:-1% !important; right:4% !important;
+            }
+        }
+    
+        /* wave(s) */
+        & .elem_wave {
+            &-01 {
+                width: 103px; height: 74px;
+                left: auto !important; top: auto !important;
+                top:45% !important; right:0 !important;
+            }
+        }
+    }
+}

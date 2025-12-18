@@ -1,0 +1,55 @@
+.page-404 {
+    @apply relative;
+
+    & .elem-scene {
+        @apply absolute w-full h-full top-0 left-0 z-0;
+    
+        /* cube(s) */
+        & .elem_cube {
+            &-01 {
+                width: 102px; height: 90px;
+                left: auto !important; top: auto !important;
+                top: 80% !important; left: -1% !important;
+            }
+        }
+    
+        /* dot(s) */
+        & .elem_dot {
+            @apply block w-4 h-4 rounded-full;
+            &-01 {
+                left: auto !important; top: auto !important;
+                bottom:24% !important; left:2% !important;
+            }
+            &-02 {
+                left: auto !important; top: auto !important;
+                top:13% !important; right:13% !important;
+            }
+            &-03 {
+                left: auto !important; top: auto !important;
+                top:26% !important; right:8% !important;
+            }
+            &-04 {
+                left: auto !important; top: auto !important;
+                bottom:11% !important; left:8% !important;
+            }
+        }
+    
+        /* triangle(s) */
+        & .elem_triangle {
+            &-01 {
+                width: 90px; height: 100px;
+                left: auto !important; top: auto !important;
+                top:12% !important; right:4% !important;
+            }
+        }
+    
+        /* wave(s) */
+        & .elem_wave {
+            &-01 {
+                width: 103px; height: 74px;
+                left: auto !important; top: auto !important;
+                top:5% !important; right:0 !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,143 @@
+/** Gravity Forms */
+body {
+    & .gform_wrapper {
+        /* @apply max-w-sm; */
+
+        & .gform_heading {
+            @apply mb-4;
+        }
+
+        & span.gform_description {
+            @apply font-light w-auto;
+        }
+
+        & label.gfield_label,
+        & .field_sublabel_below .ginput_complex.ginput_container label {
+            @apply font-sans uppercase leading-6;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            font-size: 1.125rem;
+            letter-spacing: 1px;
+        }
+
+        & .field_sublabel_below .ginput_complex.ginput_container label {
+            @apply tracking-normal;
+        }
+
+        & legend {
+            @apply hidden;
+        }
+
+        & input[type="email"],
+        & input[type="date"],
+        & input[type="datetime"],
+        & input[type="datetime-local"],
+        & input[type="month"],
+        & input[type="number"],
+        & input[type="password"],
+        & input[type="search"],
+        & input[type="tel"],
+        & input[type="text"],
+        & input[type="time"],
+        & input[type="week"],
+        & input[type="url"],
+        & select,
+        & textarea,
+        /* prettier-ignore */
+        & input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]) {
+            @apply font-sans font-normal text-primary-800 leading-none transition;
+            font-style: normal;
+            font-size: 18px;
+            font-size: 1.125rem;
+
+            @apply bg-white rounded-lg py-4 px-6;
+            border: 2px solid #ECF1F8;
+
+            &::placeholder {
+                @apply font-sans font-normal text-primary-800 leading-none transition;
+                font-style: normal;
+                font-size: 18px;
+                font-size: 1.125rem;
+            }
+
+            &:focus {
+                @apply border-0 outline-none shadow;
+            }
+        }
+
+        & .gfield_checkbox,
+        & .gfield_radio {
+            
+            & > div {
+                @apply relative mt-4;
+            }
+
+            & input[type='checkbox'],
+            & input[type='radio'] {
+                @apply absolute top-0 left-0;
+
+                @apply border-0 w-6 h-6 rounded-lg;
+            }
+            & label {
+                @apply relative block pl-8 font-sans font-normal text-primary-800 leading-5 cursor-pointer;
+                font-style: normal;
+                font-size: 16px;
+                font-size: 1rem;
+                text-transform: none;
+            }
+        }
+
+        & .button,
+        & .gform_footer input[type="submit"] {
+            @extend .btn;
+            @apply inline-block w-max bg-primary-100 font-normal not-italic cursor-pointer;
+            @apply font-sans font-bold leading-none;
+
+            font-style: normal;
+            font-size: 18px;
+            font-size: 1.125rem;
+        }
+
+        & .gfield_required {
+            color: inherit;
+        }
+
+        & .gform_validation_errors,
+        & .validation_error,
+        & .gform_validation_errors *,
+        & .validation_error * {
+            @apply text-danger text-left font-normal border-none;
+
+            @apply font-sans font-bold leading-none;
+
+            font-style: normal;
+            font-size: 18px;
+            font-size: 1.125rem;
+        }
+
+        & .gfield_error .gfield_label,
+        & li.gfield_error div.ginput_complex.ginput_container label,
+        & li.gfield_error ul.gfield_checkbox,
+        & li.gfield_error ul.gfield_radio {
+            @apply text-danger;
+        }
+
+        /* prettier-ignore */
+        & li.gfield_error {
+            input:not([type="radio"]):not([type="checkbox"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="file"]),
+            textarea {
+                @apply border-danger;
+            }
+        }
+
+        & .gfield_validation_message,
+        & .validation_message {
+            @apply w-full text-danger font-normal mt-3;
+        }
+    }
+
+    & .gform_validation_container {
+        display: none !important;
+    }
+}

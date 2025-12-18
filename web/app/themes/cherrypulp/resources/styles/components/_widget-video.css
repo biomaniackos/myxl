@@ -1,0 +1,47 @@
+.widget-video {
+    @apply relative h-0 w-full py-32;
+    padding-top: 56.258790436%;
+
+    & iframe {
+        @apply absolute block w-full h-full top-0 left-0 z-10 opacity-0;
+        &.show {
+            @apply z-0 opacity-100;
+        }
+    }
+
+    & .image-placeholder {
+        @apply absolute flex justify-center items-center w-full h-full top-0 left-0;
+
+        @apply opacity-0 cursor-pointer pointer-events-none;
+        visibility: hidden;
+        z-index: -1;
+        &.show {
+            @apply z-0 opacity-100 pointer-events-auto;
+            visibility: visible;
+        }
+        & > img {
+            @apply object-cover w-full h-full;
+        }
+
+        & .btn-video {
+            @apply absolute top-1/2 left-1/2 transition;
+            transform: translateX(-50%) translateY(-90%);
+
+            & .play {
+                width: 4.5rem;
+                height: 4.5rem;
+            }
+
+            & .play img {
+                transform: scale(1.5);
+            }
+        }
+
+        &:hover,
+        &:focus {
+            & .btn-video {
+                transform: translateX(-50%) translateY(-90%) scale(1.2);
+            }
+        }
+    }
+}

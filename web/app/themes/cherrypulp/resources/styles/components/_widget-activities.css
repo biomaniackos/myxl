@@ -1,0 +1,24 @@
+.widget-activities {
+    @apply relative;
+    & .elem-scene {
+        @apply absolute w-full h-full top-0 left-0 z-0;
+    
+        /* cube(s) */
+        & .elem_cube {
+            &-01 {
+                width: 102px; height: 90px;
+                left: auto !important; top: auto !important;
+                top: 30% !important; left: 89% !important;
+            }
+        }
+
+        /* triangle(s) */
+        & .elem_triangle {
+            &-01 {
+                width: 90px; height: 100px;
+                left: auto !important; top: auto !important;
+                bottom:10% !important; left:-5% !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,45 @@
+version: "3"
+services:
+  playground_wp:
+    build:
+      context: .
+      args:
+        - THEME_NAME=${THEME_NAME}
+    user: "${DLAB_UID-1000}:${DLAB_GUID-1000}"
+    env_file:
+      - ./.env
+    environment:
+      - DB_HOST=mariadb
+    volumes:
+      - ./:/var/www/html
+      - .cherry/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - .cherry/php/php.ini:/usr/local/etc/php.ini
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  nginx:
+    build:
+      context: ./.cherry/nginx
+    ports:
+      - 8080:8080
+    environment:
+      NGINX_APP_ENV: ${WP_ENV}
+      NGINX_APP_UPSTREAM: "playground_wp:9000"
+    depends_on:
+      - playground_wp
+    volumes:
+      - ./:/var/www/html
+
+volumes:
+  db_data:

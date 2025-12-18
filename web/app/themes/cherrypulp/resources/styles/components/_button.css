@@ -1,0 +1,182 @@
+.btn,
+input[type="submit"] {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    @apply px-10 py-5 border border-transparent text-center font-sans font-bold no-underline uppercase transition leading-none;
+    height: fit-content;
+    min-width: 180px;
+    border-radius: 80px;
+    font-size: 1.125rem;
+
+    &:focus {
+        @apply ring-offset-primary-400 ring-opacity-30 ring-4 no-underline;
+        color: var(--button-text-color);
+    }
+
+    &:hover {
+        @apply no-underline;
+        /* @apply ring-offset-primary-400 ring-opacity-30 ring-4 no-underline; */
+        color: var(--button-text-color);
+    }
+}
+
+.btn-basic {
+    @apply relative overflow-hidden;
+    color: var(--button-text-color);
+    z-index: 1;
+    
+    &::before {
+        @apply absolute block h-0 rounded-full transition-all duration-300;
+        content: "";
+        width: 105%;
+        height: 200%;
+        background-color: var(--button-bg-color);
+        z-index: -1;
+        bottom: 0; left: 50%;
+        transform: translateX(-50%) translateY(105%);
+    }
+    
+    &:hover,
+    &:focus {
+        color: var(--button-bg-color);
+        
+        &::before {
+            background-color: var(--button-text-color);
+            transform: translateX(-50%) translateY(35%);
+        }
+    }
+}
+
+.btn-video {
+    color: var(--button-text-color);
+    @apply relative flex items-center py-5 pl-16 pr-5 no-underline uppercase font-sans transition transform-gpu scale-100 leading-none;
+    height: fit-content;
+    border-radius: 80px;
+    font-size: 1.125rem;
+
+    &:focus {
+        @apply ring-offset-primary-400 ring-opacity-30 ring-4;
+        & .play {
+            @apply ring-offset-primary-400 ring-opacity-30 ring-4;
+        }
+    }
+
+    &:focus,
+    &:hover {
+        color: var(--button-text-color);
+        @apply scale-90 no-underline;
+
+        & .play {
+            @apply transition-all duration-500;
+            background-color: #B8EDFF;
+            &::before,
+            &::after {
+                background-color: #B8EDFF;
+            }
+        }
+    }
+
+    & .play {
+        @apply absolute block w-12 h-12 rounded-full top-1/2 left-0 -mt-6 ml-2 transition;
+        background-color: var(--button-bg-color);
+        & img {
+            @apply absolute w-2 h-2 top-1/2 left-1/2 -mt-1 -ml-1 z-10;
+        }
+        &::before,
+        &::after {
+            @apply absolute block w-full h-full rounded-full top-0 left-0;
+            content: "";
+            background-color: var(--button-bg-color);
+            -webkit-backface-visibility: hidden;
+        }
+        &::before {
+            animation: wave-animate 2s infinite ease-out;
+        }
+        &::after {
+            opacity:0;
+            animation: wave-animate 2s 1s infinite ease-out;
+        }
+    }
+}
+
+@keyframes wave-animate {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+    transform-origin: center;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+    transform-origin: center;
+  }
+}
+
+.btn-checkbox {
+    @apply relative inline-block px-6 py-3 border text-center font-sans no-underline uppercase transition leading-none overflow-hidden cursor-pointer;
+    @apply bg-transparent text-primary-800 border-primary-800 w-auto;
+    height: fit-content;
+    min-width: auto;
+    border-radius: 80px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+
+    &:focus {
+        @apply ring-offset-primary-400 ring-opacity-30 ring-4;
+        color: var(--button-text-color);
+    }
+
+    &:hover {
+        @apply ring-offset-primary-400 ring-opacity-30 ring-4;
+        color: var(--button-text-color);
+    }
+
+    &.checked {
+        @apply bg-primary-100 border-transparent;
+    }
+
+    & input {
+        @apply absolute opacity-0 w-full h-full top-0 left-0 cursor-pointer;
+    }
+}
+
+.btn-danger {
+    --button-bg-color: var(--danger);
+    --button-text-color: #FFFFFF;
+}
+
+.btn-dark {
+    --button-bg-color: #051074;
+    --button-text-color: #FFFFFF;
+}
+
+.btn-info {
+    --button-bg-color: var(--info);
+    --button-text-color: #FFFFFF;
+}
+
+.btn-light {
+    --button-bg-color: var(--light);
+    --button-text-color: var(--dark);
+}
+
+.btn-primary {
+    --button-bg-color: #B8EDFF;
+    --button-text-color: #051074;
+}
+.btn-white {
+    --button-bg-color: #FFFFFF;
+    --button-text-color: #051074;
+}
+
+.btn-success {
+    --button-bg-color: var(--success);
+    --button-text-color: #051074;
+}
+
+.btn-warning {
+    --button-bg-color: var(--warning);
+    --button-text-color: #051074;
+}

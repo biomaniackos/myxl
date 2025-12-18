@@ -1,0 +1,26 @@
+<?php
+
+add_filter( 'acf/fields/wysiwyg/toolbars' , 'my_toolbars'  );
+function my_toolbars( $toolbars )
+{
+	// Add a new toolbar called "Very Simple"
+	// - this toolbar has only 1 row of buttons
+	$toolbars['Very Simple' ] = array();
+	$toolbars['Very Simple' ][1] = array('bold');
+
+	// Edit the "Full" toolbar and remove 'code'
+	// - delet from array code from http://stackoverflow.com/questions/7225070/php-array-delete-by-value-not-key
+	if( ($key = array_search('code' , $toolbars['Full' ][2])) !== false )
+	{
+	    unset( $toolbars['Full' ][2][$key] );
+	}
+
+	// Uncomment to view format of $toolbars
+	// echo '< pre >';
+	// 	print_r($toolbars);
+	// echo '< /pre >';
+	// die;
+
+	// return $toolbars - IMPORTANT!
+	return $toolbars;
+}

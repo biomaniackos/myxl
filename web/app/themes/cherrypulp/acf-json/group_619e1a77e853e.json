@@ -1,0 +1,113 @@
+{
+    "key": "group_619e1a77e853e",
+    "title": "Hero Front Page",
+    "fields": [
+        {
+            "key": "field_619e1aaaaeeb7",
+            "label": "Hero",
+            "name": "hero",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_619e1abfaeeb8",
+                    "label": "Titre",
+                    "name": "title",
+                    "type": "wysiwyg",
+                    "instructions": "Utilisé les balises <strong> pour surligner votre texte\r\n<br>\r\n<br>\r\n1) sélectionner votre mot\r\n<br>\r\n2) cliquer sur [ b ]\r\n<br>\r\n<br>\r\nexemple: <strong>mon mot<\/strong",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "wpml_cf_preferences": 0,
+                    "default_value": "",
+                    "tabs": "visual",
+                    "toolbar": "very_simple",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_619e1aceaeeb9",
+                    "label": "Texte",
+                    "name": "text",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "maxlength": "",
+                    "rows": "",
+                    "new_lines": "",
+                    "wpml_cf_preferences": 0
+                },
+                {
+                    "key": "field_619e1ad7aeeba",
+                    "label": "Bouton",
+                    "name": "button",
+                    "type": "link",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "wpml_cf_preferences": 0
+                },
+                {
+                    "key": "field_619e1ae4aeebb",
+                    "label": "Vidéo",
+                    "name": "video",
+                    "type": "link",
+                    "instructions": "Vous pouvez créer un scroll jusqu'une section vidéo en donnant comme lien le nom de la section <br>\r\n<br>\r\nexemple: <br>\r\nnom de la section de ma vidéo = \"video\" <br>\r\nmon lien = \"#video\"",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_type",
+                "operator": "==",
+                "value": "front_page"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1640097748
+}

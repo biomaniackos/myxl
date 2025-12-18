@@ -1,0 +1,63 @@
+.ss-main {
+    @apply font-sans font-normal text-primary-800 leading-none transition;
+    font-style: normal;
+    font-size: 18px;
+    font-size: 1.125rem;
+
+    & .ss-single-selected {
+        @apply h-auto;
+        @apply p-4 rounded-md bg-white;
+
+        &:hover {
+            @apply ring-offset-primary-400 ring-opacity-30 ring-4;
+        }
+    }
+
+    & .ss-content .ss-search input {
+        @apply font-sans font-normal text-primary-800 leading-none transition;
+        font-style: normal;
+
+        &::placeholder {
+            @apply font-sans font-normal text-primary-800 text-opacity-60 leading-none transition;
+            font-style: normal;
+        }
+
+        &:hover,
+        &:focus {
+            box-shadow: none;
+            @apply ring-opacity-30 ring-offset-primary-400 ring-4;
+        }
+    }
+
+
+    & .ss-single-selected .ss-arrow span {
+        @apply border-primary-800;
+    }
+    & .ss-single-selected .placeholder .ss-disabled {
+        @apply font-sans font-normal text-primary-800 opacity-70 leading-none transition;
+        font-style: normal;
+        font-size: 18px;
+        font-size: 1.125rem;
+    }
+
+    & .ss-content .ss-list .ss-option.ss-disabled {
+        @apply font-sans font-normal text-primary-800 opacity-70 leading-none transition;
+        font-style: normal;
+        font-size: 18px;
+        font-size: 1.125rem;
+    }
+
+    & .ss-content .ss-list .ss-option {
+        &:hover,
+        &:focus {
+            @apply bg-primary-100 text-primary-800;
+        }
+    }
+    & .ss-content .ss-list .ss-option:not(.ss-disabled).ss-option-selected {
+        @apply bg-primary-100 bg-opacity-50 text-primary-800;
+    }
+
+    & .ss-content.ss-open {
+        @apply rounded-b-lg
+    }
+}

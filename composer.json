@@ -1,0 +1,284 @@
+{
+  "name": "cherrypulp/bedrock",
+  "type": "project",
+  "license": "MIT",
+  "description": "WordPress boilerplate with modern development tools, easier configuration, and an improved folder structure",
+  "homepage": "https://gitlab.com/cherrypulp/boilerplates/wordpress-bedrock",
+  "keywords": [
+    "bedrock",
+    "composer",
+    "roots",
+    "wordpress",
+    "wp",
+    "wp-config"
+  ],
+  "support": {
+    "issues": "https://github.com/roots/bedrock/issues",
+    "forum": "https://discourse.roots.io/category/bedrock"
+  },
+  "autoload": {
+    "psr-0": {
+      "CherryPulp\\PostInstall": "scripts"
+    }
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/gravityforms",
+        "type": "wordpress-plugin",
+        "version": "2.8.0",
+        "dist": {
+          "url": "https://www.gravityhelp.com/wp-content/plugins/gravitymanager/api.php?op=download&slug=gravityforms&key=TA_CLE_DE_LICENCE",
+          "type": "zip"
+        }
+      }
+    },
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*",
+        "wpackagist-theme/*"
+      ]
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/advanced-custom-fields-pro",
+        "version": "5.11.1",
+        "type": "wordpress-muplugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=b3JkZXJfaWQ9NTQyNTl8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE1LTA0LTE2IDEzOjQ3OjU3"
+        },
+        "require": {
+          "ffraenz/private-composer-installer": "^5.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-multilingual-cms",
+        "version": "4.4.12",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=6088&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-string-translation",
+        "version": "3.1.10",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=6092&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=3.1.10"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-media-translation",
+        "version": "2.6.5",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=7474&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=2.6.5"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-sticky-links",
+        "version": "1.5.4",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=6090&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=1.5.4"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-cms-navigation",
+        "version": "1.5.5",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=6096&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=1.5.5"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-gravity-forms-mutlilingual",
+        "version": "1.6.1",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=8882&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=1.6.1"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wpml-advanced-custom-fields-mutlilingual",
+        "version": "1.8.2",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wpml.org/?download=1097589&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=1.8.2"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/admin-columns-pro",
+        "version": "5.5.3",
+        "type": "wordpress-muplugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://www.admincolumns.com/?command=download&subscription_key=c78e5423-7cf8-4221-924e-f51116941b72&product_key=admin-columns-pro&version=5.5.3"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/addon-advanced-custom-fields",
+        "version": "2.6.4",
+        "type": "wordpress-muplugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://www.admincolumns.com/?command=download&subscription_key=c78e5423-7cf8-4221-924e-f51116941b72&product_key=ac-addon-acf&version=2.6.4"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/addon-gravity-forms",
+        "version": "1.0.2",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://www.admincolumns.com/?command=download&subscription_key=c78e5423-7cf8-4221-924e-f51116941b72&product_key=ac-addon-gravityforms&version=1.0.2"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/addon-yoast-seo",
+        "version": "1.0.3",
+        "type": "wordpress-muplugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://www.admincolumns.com/?command=download&subscription_key=c78e5423-7cf8-4221-924e-f51116941b72&product_key=ac-addon-yoast-seo&version=1.0.3"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "private-plugin/wp-rocket",
+        "version": "3.9.4",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://wp-rocket.me/download/28714/68a93dad/"
+        }
+      }
+    }
+  ],
+  "require": {
+    "composer/installers": "^2.0",
+    "log1x/acf-editor-palette": "^1.0",
+    "oscarotero/env": "^2.1",
+    "php": ">=7.1",
+    "private-plugin/advanced-custom-fields-pro": "^5.10",
+    "private-plugin/wp-rocket": "^3.9",
+    "private-plugin/wpml-advanced-custom-fields-mutlilingual": "^1.8",
+    "private-plugin/wpml-cms-navigation": "^1.5",
+    "private-plugin/wpml-gravity-forms-mutlilingual": "^1.6",
+    "private-plugin/wpml-media-translation": "^2.6",
+    "private-plugin/wpml-multilingual-cms": "^4.4",
+    "private-plugin/wpml-sticky-links": "^1.5",
+    "private-plugin/wpml-string-translation": "^3.1",
+    "roots/bedrock-autoloader": "^1.0",
+    "roots/bedrock-disallow-indexing": "^2.0",
+    "roots/wordpress": "6.8.3",
+    "roots/wp-config": "1.0.0",
+    "roots/wp-password-bcrypt": "1.1.0",
+    "vlucas/phpdotenv": "^5.4",
+    "wpackagist-plugin/acf-content-analysis-for-yoast-seo": "^3.0",
+    "wpackagist-plugin/better-search-replace": "^1.3",
+    "wpackagist-plugin/classic-editor": "^1.6",
+    "wpackagist-plugin/cookie-law-info": "^3.0",
+    "wpackagist-plugin/disable-comments": "^2.1",
+    "wpackagist-plugin/duplicate-page": "^4.4",
+    "wpackagist-plugin/google-site-kit": "^1.89",
+    "wpackagist-plugin/post-types-order": "^1.9",
+    "wpackagist-plugin/svg-support": "^2.3",
+    "wpackagist-plugin/tinymce-advanced": "^5.6",
+    "wpackagist-plugin/wordpress-seo": "^18.0",
+    "wpackagist-plugin/worker": "^4.9",
+    "wpackagist-plugin/wp-mail-smtp": "^3.4"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "squizlabs/php_codesniffer": "^3.6.2"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "composer/installers": true,
+      "ffraenz/private-composer-installer": true,
+      "roots/wordpress-core-installer": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "installer-paths": {
+      "web/app/mu-plugins/{$name}/": [
+        "type:wordpress-muplugin",
+        "wpackagist-plugin/disable-comments",
+        "wpackagist-plugin/duplicate-page",
+        "wpackagist-plugin/simple-custom-post-order",
+        "wpackagist-plugin/toolbar-publish-button"
+      ],
+      "web/app/plugins/{$name}/": [
+        "type:wordpress-plugin"
+      ],
+      "web/app/themes/{$name}/": [
+        "type:wordpress-theme"
+      ]
+    },
+    "wordpress-install-dir": "web/wp"
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "php -r \"copy('.env.example', '.env');\"",
+      "composer suggests"
+    ],
+    "post-install-cmd": [
+      "composer suggests"
+    ],
+    "test": [
+      "phpcs"
+    ]
+  }
+}

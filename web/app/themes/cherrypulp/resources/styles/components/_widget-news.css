@@ -1,0 +1,3 @@
+.widget-news {
+    @apply relative bg-primary-100 py-32;
+}

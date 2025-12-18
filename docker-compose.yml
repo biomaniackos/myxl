@@ -1,0 +1,47 @@
+version: "3"
+services:
+  myxl_wp:
+    build:
+      context: .
+      args:
+        - THEME_NAME=${THEME_NAME}
+    # uncomment the following only for linux user, replace with your own uid:guid
+    user: "${DLAB_UID-1000}:${DLAB_GUID-1000}"
+    env_file:
+      - ./.env
+    environment:
+      - WP_HOME="https://${DLAB_SUB_DOMAIN}.${DLAB_DOMAIN}"
+      - WP_SITEURL="https://${DLAB_SUB_DOMAIN}.${DLAB_DOMAIN}/wp"
+    volumes:
+      - ./:/var/www/html
+      - ./.cherry/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./.cherry/php/php.ini:/usr/local/etc/php.ini
+    networks:
+      - lab_network
+
+  nginx:
+    build:
+      context: ./.cherry/nginx
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${DLAB_NAME}-http.entrypoints=web
+      - traefik.http.routers.${DLAB_NAME}-http.rule=Host(`${DLAB_SUB_DOMAIN}.${DLAB_DOMAIN}`)
+      - traefik.http.routers.${DLAB_NAME}-http.middlewares=redirect-https
+      - traefik.http.middlewares.redirect-https.redirectscheme.scheme=https
+      - traefik.http.routers.${DLAB_NAME}.entrypoints=websecure
+      - traefik.http.routers.${DLAB_NAME}.rule=Host(`${DLAB_SUB_DOMAIN}.${DLAB_DOMAIN}`)
+      - traefik.http.routers.${DLAB_NAME}.tls.certResolver=certresolver
+    environment:
+      NGINX_APP_ENV: ${WP_ENV}
+      NGINX_APP_UPSTREAM: ${DLAB_NAME}:9000
+    depends_on:
+      - ${DLAB_NAME}
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - lab_network
+
+networks:
+  lab_network:
+    external: true
+    name: ${DLAB_NETWORK}

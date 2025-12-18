@@ -1,0 +1,28 @@
+.square {
+    background-color: #eee;
+    background-position: center;
+    background-size: 100%;
+    overflow: hidden;
+    padding-bottom: 100%;
+    position: relative;
+
+    &[href] {
+        color: #fff;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0);
+        transition: all .2s ease-in-out;
+
+        &:hover, &:focus {
+            background-size: 110%;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+        }
+    }
+
+    &__content {
+        color: #fff;
+        height: 100%;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+    }
+}
+

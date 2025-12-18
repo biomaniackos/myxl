@@ -1,0 +1,68 @@
+footer.app-footer {
+    @apply bg-primary-800 text-white;
+}
+
+.contact-us {
+    @apply relative flex flex-col justify-center items-center bg-primary-100 pt-40 pb-20 px-5;
+
+    & h2, {
+        @apply text-primary-800;
+        & a {
+            @apply relative inline-block text-primary-800 no-underline transition duration-500;
+            &::before {
+                @apply absolute block -bottom-2 left-0 w-full bg-primary-800 transition-all duration-300;
+                content: "";
+                height: 3px;
+                z-index: 0;
+            }
+
+            & span {
+                @apply relative inline-block text-primary-800 no-underline transition duration-500;
+            }
+
+            &:hover, &:focus {
+                & span {
+                    @apply text-white;
+                }
+                @apply text-white;
+                &::before {
+                    @apply h-full -left-2;
+                    height: calc(100% + 20px);
+                    width: calc(100% + 20px);
+                }
+            }
+        }
+    }
+}
+
+.footer-copyright {
+    @apply py-5 mt-10 md:mt-20;
+    & small {
+        @apply font-medium leading-6;
+        font-style: normal;
+        font-size: 16px;
+        font-size: 1rem;
+
+        & a {
+            @apply no-underline text-primary-100;
+            &:hover, &:fovus {
+                @apply underline text-primary-400;
+            }
+        }
+    }
+}
+
+.footer-menu {
+    & ul {
+        @apply m-0 p-0;
+
+        & li {
+            @apply mb-4;
+        }
+        & a {
+            @apply font-sans font-bold leading-none text-white no-underline uppercase px-1 py-2;
+            font-size: 16px;
+            font-size: 1rem;
+        }
+    }
+}

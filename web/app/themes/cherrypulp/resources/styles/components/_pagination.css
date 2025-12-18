@@ -1,0 +1,48 @@
+.nav-links {
+    @apply flex justify-center items-center mx-auto max-w-lg;
+
+    &, & * {
+        @apply font-sans leading-none text-primary-800;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        font-size: 0.8125rem;
+    }
+
+    & .page-numbers {
+        @apply flex justify-center items-center w-8 h-8 rounded-full mx-1 transition;
+
+        &:hover, &:focus {
+            @apply no-underline;
+        }
+
+        &.prev {
+            @apply mr-20 pl-7;
+            &::before {
+                @apply left-1;
+                transform: rotate(180deg);
+            }
+        }
+        &.next {
+            @apply ml-20 pr-7;
+            &::before {
+                @apply right-1;
+            }
+        }
+
+        &.prev, &.next {
+            @apply relative w-auto;
+            &::before {
+                @apply absolute block w-3 h-3;
+                content: "";
+                background: url('../images/arrow.png')no-repeat center;
+                background-size: 90%;
+                top: calc(50% - 6px);
+            }
+        }
+
+        &.current {
+            @apply bg-primary-100;
+        }
+    }
+}

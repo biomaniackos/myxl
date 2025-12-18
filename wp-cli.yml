@@ -1,0 +1,24 @@
+# see: https://make.wordpress.org/cli/handbook/references/config/
+path: web/wp
+server:
+  docroot: web
+
+# shortcuts
+@dev:
+  ssh: user@xxx.xxx.xxx.xxx:22
+  path: /home/project/web/dev/web/wp
+
+@demo:
+  ssh: myxl_demo@15.188.51.201
+  path: /home/myxl_demo/myxl.lademo.be/web/wp
+
+@prod:
+  ssh: myxl@174.138.10.82
+  path: /home/myxl/myxl.be/web/wp
+
+@development:
+  - @dev
+  - @demo
+
+@production:
+  - @prod

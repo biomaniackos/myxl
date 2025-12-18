@@ -1,0 +1,22 @@
+@import "_setup.css";
+@import "./common/_typography.css";
+@import "tailwindcss/utilities";
+
+// Components
+@import "./components/_alert.css";
+@import "./components/_banner.css";
+@import "./components/_button.css";
+@import "./components/_logo-cloud.css";
+@import "./components/_section-cta.css";
+
+.block-editor-block-list__layout {
+    @apply font-sans;
+}
+
+.wp-block {
+    @apply max-w-screen-md;
+
+    &.editor-post-title__block .editor-post-title__input {
+        @apply font-sans;
+    }
+}

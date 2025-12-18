@@ -1,0 +1,79 @@
+.alert {
+    background-color: var(--alert-bg-color);
+    color: var(--alert-text-color);
+    @apply p-2 rounded-lg shadow-lg sm:p-3;
+
+    a {
+        color: var(--alert-text-color);
+        @apply underline;
+
+        &:hover {
+            @apply no-underline;
+        }
+    }
+
+    .alert-wrapper {
+        @apply flex;
+    }
+
+    .alert-close {
+        @apply flex p-2 rounded-md;
+
+        &:focus {
+            @apply outline-none ring-2 ring-white;
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, .1);
+        }
+
+        > i, > svg {
+            @apply h-5 w-5;
+            color: var(--alert-text-color);
+        }
+    }
+
+    .alert-icon {
+        @apply flex-shrink-0;
+
+        > i, > svg {
+            @apply h-6 w-6;
+            color: var(--alert-text-color);
+        }
+    }
+
+    .alert-message {
+        @apply my-0 ml-3 font-medium truncate;
+        color: var(--alert-text-color);
+    }
+}
+
+.alert-danger {
+    --alert-bg-color: theme('colors.danger');
+    --alert-link-color: theme('colors.danger');
+    --alert-text-color: theme('colors.danger');
+}
+
+.alert-info {
+    --alert-bg-color: theme('colors.info.100');
+    --alert-link-color: theme('colors.info.600');
+    --alert-text-color: theme('colors.info.600');
+}
+
+.alert-primary {
+    --alert-bg-color: theme('colors.primary.100');
+    --alert-link-color: theme('colors.primary.400');
+    --alert-text-color: theme('colors.primary.400');
+}
+
+.alert-success {
+    --alert-bg-color: theme('colors.success');
+    --alert-link-color: theme('colors.success');
+    --alert-text-color: theme('colors.success');
+}
+
+.alert-warning {
+    --alert-bg-color: theme('colors.warning');
+    --alert-link-color: theme('colors.warning');
+    --alert-text-color: theme('colors.warning');
+}

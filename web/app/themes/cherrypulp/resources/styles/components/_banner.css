@@ -1,0 +1,104 @@
+.banner {
+    a:not(.btn) {
+        color: var(--banner-text-color);
+        @apply underline;
+
+        &:hover {
+            @apply no-underline;
+        }
+    }
+
+    .banner-close {
+        @apply flex p-2 rounded-md;
+
+        &:focus {
+            @apply outline-none ring-2 ring-white;
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, .2);
+        }
+
+        > i, > svg {
+            @apply h-6 w-6;
+            color: var(--banner-text-color);
+        }
+    }
+
+    .banner-icon {
+        @apply flex p-2 w-10 h-10 rounded-lg;
+        background-color: rgba(0, 0, 0, .2);
+
+        > i, > svg {
+            @apply h-6 w-6;
+            color: var(--banner-text-color);
+        }
+    }
+
+    .banner-message {
+        @apply my-0 ml-3 font-medium truncate;
+        color: var(--banner-text-color);
+    }
+}
+
+.banner-bar {
+    background-color: var(--banner-bg-color);
+    color: var(--banner-text-color);
+    @apply shadow;
+
+    .banner-wrapper {
+        @apply max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8;
+    }
+}
+
+.banner-toast {
+    @apply max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8;
+
+    .banner-wrapper {
+        background-color: var(--banner-bg-color);
+        color: var(--banner-text-color);
+        @apply p-2 rounded-lg shadow-lg sm:p-3;
+    }
+}
+
+.banner-danger {
+    --banner-bg-color: var(--danger);
+    --banner-link-color: #fff;
+    --banner-text-color: #fff;
+}
+
+.banner-dark {
+    --banner-bg-color: var(--dark);
+    --banner-link-color: #fff;
+    --banner-text-color: #fff;
+}
+
+.banner-info {
+    --banner-bg-color: var(--info);
+    --banner-link-color: #fff;
+    --banner-text-color: #fff;
+}
+
+.banner-light {
+    --banner-bg-color: var(--light);
+    --banner-link-color: var(--dark);
+    --banner-text-color: var(--dark);
+}
+
+.banner-primary {
+    --banner-bg-color: var(--primary);
+    --banner-link-color: #fff;
+    --banner-text-color: #fff;
+}
+
+.banner-success {
+    --banner-bg-color: var(--success);
+    --banner-link-color: #fff;
+    --banner-text-color: #fff;
+}
+
+.banner-warning {
+    --banner-bg-color: var(--warning);
+    --banner-link-color: #fff;
+    --banner-text-color: #fff;
+}

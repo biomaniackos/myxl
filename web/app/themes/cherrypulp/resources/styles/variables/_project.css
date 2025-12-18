@@ -1,0 +1,11 @@
+:root {
+    --danger: theme('colors.danger');
+    --dark: theme('colors.dark');
+    --gray: theme('colors.gray.500');
+    --info: theme('colors.info.500');
+    --light: theme('colors.light');
+    --primary: theme('colors.primary.400');
+    --secondary: theme('colors.secondary.400');
+    --success: theme('colors.success');
+    --warning: theme('colors.warning');
+}

@@ -1,0 +1,23 @@
+.card-post-activity {
+    @apply relative p-10 rounded-lg overflow-hidden;
+    background-color: #F6F6F4;
+
+    & .wrapper-bottom {
+        @apply flex justify-start items-center mt-6;
+        &-img {
+            @apply w-20 h-20 rounded-full overflow-hidden;
+            & img {
+                @apply object-cover w-full h-full;
+            }
+        }
+        & h4 {
+            @apply m-0 ml-6;
+        }
+    }
+
+    & a {
+        @apply absolute block overflow-hidden top-0 left-0 w-full h-full opacity-0 z-10;
+        white-space: nowrap;
+        text-indent: 99999px;
+    }
+}

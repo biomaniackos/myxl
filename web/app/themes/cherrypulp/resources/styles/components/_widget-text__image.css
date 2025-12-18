@@ -1,0 +1,32 @@
+.widget-text__image {
+    @apply relative py-32;
+    
+    & .wrapper-image {
+        @apply relative flex;
+
+        & > img {
+            @apply relative w-full;
+            border-radius: 20px;
+        }
+
+        & .decoration {
+            @apply absolute w-36 h-36 -top-16 -left-20;
+        }
+
+        &.invert {
+            & .decoration {
+                @apply left-auto -right-20;
+            }
+        }
+    }
+
+    & .wrapper-content {
+        @apply flex flex-col justify-center max-w-lg;
+
+        & .content,
+        & .content * {
+            font-size: 18px;
+            font-size: 1.125rem;
+        }
+    }
+}

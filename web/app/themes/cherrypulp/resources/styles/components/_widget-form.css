@@ -1,0 +1,95 @@
+.widget-form {
+    @apply relative py-32;
+    & .wrapper-form {
+        @apply relative overflow-hidden rounded-lg p-4 sm:p-10;
+        z-index: 1;
+
+        & .background {
+            @apply absolute top-0 left-0 w-full h-full z-0;
+            background-color: #e4f4f8;
+        }
+
+        & .form {
+            @apply relative z-10;
+        }
+
+        /* & .gfield {
+            @apply mt-10;
+        } */
+        & .gfield {
+            & label {
+                @apply block mt-10;
+            }
+            &:first-child label {
+                @apply mt-0;
+            }
+
+            & .ginput_container_checkbox {
+                @apply mt-7;
+                & label {
+                    @apply mt-0;
+                }
+            }
+        }
+
+        & .gform_footer {
+            @apply flex justify-end;
+        }
+        & input[type="submit"],
+        &.button {
+            @apply mt-10;
+        }
+    }
+
+    & .elem-scene {
+        @apply absolute w-full h-full top-0 left-0 z-0;
+    
+        /* cube(s) */
+        & .elem_cube {
+            &-01 {
+                width: 105px; height: 93px;
+                left: auto !important; top: auto !important;
+                top:70% !important; left:-3% !important;
+            }
+        }
+    
+        /* dot(s) */
+        & .elem_dot {
+            @apply block w-4 h-4 rounded-full;
+            &-01 {
+                left: auto !important; top: auto !important;
+                bottom:35% !important; left:4% !important;
+            }
+            &-02 {
+                left: auto !important; top: auto !important;
+                top:9% !important; right:14% !important;
+            }
+            &-03 {
+                left: auto !important; top: auto !important;
+                bottom:19% !important; left:9% !important;
+            }
+            &-04 {
+                left: auto !important; top: auto !important;
+                top:24% !important; right:7% !important;
+            }
+        }
+
+        /* triangle(s) */
+        & .elem_triangle {
+            &-01 {
+                width: 80px; height: 88px;
+                left: auto !important; top: auto !important;
+                top: 10% !important; right: 2% !important;
+            }
+        }
+    
+        /* wave(s) */
+        & .elem_wave {
+            &-01 {
+                width: 103px; height: 74px;
+                left: auto !important; top: auto !important;
+                top:0 !important; right:0 !important;
+            }
+        }
+    }
+}

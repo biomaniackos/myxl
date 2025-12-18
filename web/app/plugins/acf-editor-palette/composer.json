@@ -1,0 +1,31 @@
+{
+  "name": "log1x/acf-editor-palette",
+  "type": "wordpress-plugin",
+  "description": "A replica Gutenberg color picker field for Advanced Custom Fields.",
+  "keywords": [
+    "acf",
+    "acf-field",
+    "wordpress",
+    "wordpress-plugin",
+    "gutenberg",
+    "color-picker"
+  ],
+  "require": {
+    "php": ">=7.2"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.21"
+  },
+  "autoload": {
+    "psr-4": {
+      "Log1x\\AcfEditorPalette\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

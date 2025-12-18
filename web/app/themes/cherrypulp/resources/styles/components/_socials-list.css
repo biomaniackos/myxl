@@ -1,0 +1,17 @@
+.socials-list {
+    & .btn {
+        &:hover {
+            @apply ring-offset-transparent ring-opacity-0 ring-0;
+        }
+
+        & svg {
+            @apply transition;
+        }
+
+        &:hover, &:focus {
+            & svg {
+                color: var(--data-color);
+            }
+        }
+    }
+}

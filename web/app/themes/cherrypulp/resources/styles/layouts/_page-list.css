@@ -1,0 +1,45 @@
+.page-list {
+    @apply relative;
+    & .elem-scene {
+        @apply absolute w-full h-full top-0 left-0 z-0;
+    
+        /* cube(s) */
+        & .elem_cube {
+            &-01 {
+                width: 105px; height: 93px;
+                left: auto !important; top: auto !important;
+                top: 8% !important; left: 89% !important;
+            }
+        }
+    
+        /* dot(s) */
+        & .elem_dot {
+            @apply block w-4 h-4 rounded-full;
+            &-01 {
+                left: auto !important; top: auto !important;
+                top:9% !important; left:1% !important;
+            }
+            &-02 {
+                left: auto !important; top: auto !important;
+                top:16% !important; left:2% !important;
+            }
+            &-03 {
+                left: auto !important; top: auto !important;
+                top:6% !important; right:3% !important;
+            }
+            &-04 {
+                left: auto !important; top: auto !important;
+                bottom:19% !important; right:1% !important;
+            }
+        }
+    
+        /* triangle(s) */
+        & .elem_triangle {
+            &-01 {
+                width: 80px; height: 88px;
+                left: auto !important; top: auto !important;
+                bottom:31% !important; left:-1% !important;
+            }
+        }
+    }
+}

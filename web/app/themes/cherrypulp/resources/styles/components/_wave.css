@@ -1,0 +1,50 @@
+.wave {
+    @apply relative bg-primary-100 py-32;
+}
+
+.wave-top {
+    &::before {
+        @apply block absolute bg-repeat-x;
+        width: 14400px;
+        height: 53px;
+        content: '';
+        background: url('../images/infinite-wave-pattern.svg');
+    }
+    &::before {
+        @apply left-0;
+        top: -52px;
+        animation: slide 55s infinite linear;
+    }
+}
+
+.wave-bottom {
+    &::after {
+        @apply block absolute bg-repeat-x;
+        width: 14400px;
+        height: 53px;
+        content: '';
+        background: url('../images/infinite-wave-pattern.svg');
+    }
+    &::after {
+        @apply left-0;
+        bottom: -52px;
+        transform: rotateX(180deg);
+        animation: slideInvert 55s infinite linear;
+    }
+}
+
+.wave-top.wave-white::before,
+.wave-bottom.wave-white::after {
+  background: url('../images/infinite-wave-pattern-white.svg');
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(-7200px);
+  }
+}
+@keyframes slideInvert {
+  to {
+    transform: rotateX(180deg) translateX(-7200px);
+  }
+}
