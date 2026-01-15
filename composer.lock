@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fc7763be8a37ebe8427a8ad04285fa3",
+    "content-hash": "e23502042fe125c16e22d115f02fca02",
     "packages": [
         {
             "name": "composer/installers",
@@ -1288,15 +1288,15 @@
         },
         {
             "name": "wpackagist-plugin/contact-form-7",
-            "version": "5.9.8",
+            "version": "6.1.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/contact-form-7/",
-                "reference": "tags/5.9.8"
+                "reference": "tags/6.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/contact-form-7.5.9.8.zip"
+                "url": "https://downloads.wordpress.org/plugin/contact-form-7.6.1.4.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1378,15 +1378,15 @@
         },
         {
             "name": "wpackagist-plugin/post-types-order",
-            "version": "1.9.9.2",
+            "version": "2.4.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/post-types-order/",
-                "reference": "tags/1.9.9.2"
+                "reference": "tags/2.4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/post-types-order.1.9.9.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/post-types-order.2.4.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1432,15 +1432,15 @@
         },
         {
             "name": "wpackagist-plugin/wordpress-seo",
-            "version": "18.9",
+            "version": "26.7",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordpress-seo/",
-                "reference": "tags/18.9"
+                "reference": "tags/26.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.18.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordpress-seo.26.7.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1468,21 +1468,37 @@
         },
         {
             "name": "wpackagist-plugin/wp-mail-smtp",
-            "version": "3.11.1",
+            "version": "4.7.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wp-mail-smtp/",
-                "reference": "tags/3.11.1"
+                "reference": "tags/4.7.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-mail-smtp.3.11.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/wp-mail-smtp.4.7.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/wp-mail-smtp/"
+        },
+        {
+            "name": "wpengine/advanced-custom-fields-pro",
+            "version": "6.7.0.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://connect.advancedcustomfields.com/v2/plugins/composer_download?s=composer&p=pro&t=6.7.0.2"
+            },
+            "require": {
+                "composer/installers": "~1.0 || ~2.0"
+            },
+            "replace": {
+                "wpackagist-plugin/advanced-custom-fields": "self.version",
+                "wpengine/advanced-custom-fields": "self.version"
+            },
+            "type": "wordpress-plugin"
         }
     ],
     "packages-dev": [

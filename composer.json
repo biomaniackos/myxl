@@ -149,6 +149,10 @@
           "url": "https://wp-rocket.me/download/28714/68a93dad/"
         }
       }
+    },
+    {
+      "type": "composer",
+      "url": "https://connect.advancedcustomfields.com"
     }
   ],
   "require": {
@@ -157,6 +161,7 @@
     "oscarotero/env": "^2.1",
     "php": "^8.3",
     "private-plugin/wp-rocket": "^3.9",
+    "wpengine/advanced-custom-fields-pro": "*",
     "private-plugin/wpml-advanced-custom-fields-mutlilingual": "^1.8",
     "private-plugin/wpml-cms-navigation": "^1.5",
     "private-plugin/wpml-media-translation": "^2.6",
@@ -176,13 +181,13 @@
     "wpackagist-plugin/disable-comments": "^2.1",
     "wpackagist-plugin/duplicate-page": "^4.4",
     "wpackagist-plugin/google-site-kit": "^1.89",
-    "wpackagist-plugin/post-types-order": "^1.9",
+    "wpackagist-plugin/post-types-order": "^2.4",
     "wpackagist-plugin/svg-support": "^2.3",
     "wpackagist-plugin/tinymce-advanced": "^5.6",
-    "wpackagist-plugin/wordpress-seo": "^18.0",
+    "wpackagist-plugin/wordpress-seo": "^26.7",
     "wpackagist-plugin/worker": "^4.9",
-    "wpackagist-plugin/wp-mail-smtp": "^3.4",
-    "wpackagist-plugin/contact-form-7": "^5.9"
+    "wpackagist-plugin/wp-mail-smtp": "^4.7",
+    "wpackagist-plugin/contact-form-7": "^6.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
