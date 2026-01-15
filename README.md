@@ -8,7 +8,7 @@
 
 
 ## Requirements
-- PHP 7.1
+- PHP 8.3
 - [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 - [WP CLI](https://wp-cli.org/fr/#installation)
 
