@@ -419,7 +419,7 @@ class Controller extends Cloud {
 				'tables_missing' => false,
 				'pageviews'      => array(
 					'count'    => isset( $response['pageviews']['views'] ) ? absint( $response['pageviews']['views'] ) : 0,
-					'limit'    => isset( $response['pageviews']['views_limit'] ) ? absint( $response['pageviews']['views_limit'] ) : 25000,
+					'limit'    => isset( $response['pageviews']['views_limit'] ) ? absint( $response['pageviews']['views_limit'] ) : 5000,
 					'exceeded' => isset( $response['pageviews']['limit_exceeded'] ) && 1 === absint( $response['pageviews']['limit_exceeded'] ),
 					'ends_at'   => $pageview_reset_date,
 				),
@@ -432,8 +432,20 @@ class Controller extends Cloud {
 					'selected_plan'        => isset( $plan['slug'] ) ? sanitize_text_field( $plan['slug'] ) : 'free',
 					'canStartOptoutTrial'  => isset( $response['canStartOptoutTrial'] ) ? (bool) $response['canStartOptoutTrial'] : false,
 				),
+				'overage' => array(
+					'applicable'         => isset( $response['overage']['applicable'] ) ? (bool) $response['overage']['applicable'] : false,
+					'enabled'            => isset( $response['overage']['enabled'] ) ? (bool) $response['overage']['enabled'] : false,
+					'is_after_rollout'   => isset( $response['overage']['is_after_rollout'] ) ? (bool) $response['overage']['is_after_rollout'] : false,
+					'overage_view_count' => isset( $response['overage']['overage_view_count'] ) ? absint( $response['overage']['overage_view_count'] ) : 0,
+				),
 			);
 			return $data;
+		} elseif ( 401 === $response_code ) {
+			return new WP_Error(
+				'cky_unauthorized',
+				__( 'Your session has expired. Please verify your connection.', 'cookie-law-info' ),
+				array( 'status' => 401 )
+			);
 		}
 		return new WP_Error(
 			'cky_api_fetching_failed',

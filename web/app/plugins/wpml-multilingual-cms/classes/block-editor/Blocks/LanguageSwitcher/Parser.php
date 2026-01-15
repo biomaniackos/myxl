@@ -44,7 +44,9 @@ class Parser {
 		}
 
 		// converts double quotes around font family to its corresponding XML entity in order to make it render properly on frontend.
-		$blockHTML = $this->maybeFixFontFamilyInStyle( $blockHTML );
+		if ( isset( $blockAttrs[ 'fontFamilyValue' ] ) ) {
+			$blockHTML = $this->maybeFixFontFamilyInStyle( $blockHTML, $blockAttrs[ 'fontFamilyValue' ] );
+		}
 
 		// Replace some classNames according to values in context if the current block is Navigation Language Switcher
 		// We use values from context to inherit them from the parent Navigation Block
@@ -123,7 +125,7 @@ class Parser {
 	/**
 	 * @param \DOMXPath $DOMXpath
 	 *
-	 * @return LabelTemplateInterface
+	 * @return ?LabelTemplateInterface
 	 */
 	private function getLanguageItemlabel( $DOMXpath, $XPathPrefix ) {
 		foreach ( static::LABEL_TYPES as $labelTypeClass ) {
@@ -133,13 +135,15 @@ class Parser {
 				return $labelType;
 			}
 		}
+
+		return null;
 	}
 
-	private function maybeFixFontFamilyInStyle( $blockHTML ) {
-		$fontFamilyValuePattern = '/\\--font-family:(.*?)\\;/';
+	private function maybeFixFontFamilyInStyle( $blockHTML, $fontFamilyValue ) {
+		$fontFamilyValuePattern = '/\\--font-family:' . preg_quote( $fontFamilyValue ) . '/';
 
 		$convertDoubleQuoteToXMLEntity = function ( $matches ) {
-			return str_replace( '"', '&quot;', $matches[0] );
+			return str_replace( '"', '&quot;', $matches[ 0 ] );
 		};
 
 		return preg_replace_callback( $fontFamilyValuePattern, $convertDoubleQuoteToXMLEntity, $blockHTML );

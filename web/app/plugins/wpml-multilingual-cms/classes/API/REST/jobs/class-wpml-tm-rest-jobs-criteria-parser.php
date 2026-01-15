@@ -67,7 +67,7 @@ class WPML_TM_Rest_Jobs_Criteria_Parser {
 			}
 		}
 
-		foreach ( [ 'local_job_ids', 'title', 'target_language', 'batch_name' ] as $key ) {
+		foreach ( [ 'ids', 'local_job_ids', 'title', 'target_language', 'batch_name' ] as $key ) {
 			$value = (string) $request->get_param( $key );
 			if ( strlen( $value ) ) {
 				$params->{'set_' . $key}( explode( ',', $value ) );
@@ -77,15 +77,8 @@ class WPML_TM_Rest_Jobs_Criteria_Parser {
 		if ( $request->get_param( 'status' ) !== null ) {
 			$statuses = Fns::map( Cast::toInt(), explode( ',', $request->get_param( 'status' ) ) );
 
-			if ( $statuses === [ ICL_TM_NEEDS_REVIEW ] ) {
-				$params->set_needs_review( true );
-			} else {
-				$params->set_status( Fns::reject( Relation::equals( ICL_TM_NEEDS_REVIEW ), $statuses ) );
-
-				if ( ! Lst::includes( ICL_TM_NEEDS_REVIEW, $statuses ) ) {
-					$params->set_needs_review( false );
-				}
-			}
+			$params->set_status( Fns::reject( Relation::equals( ICL_TM_NEEDS_REVIEW ), $statuses ) );
+			$params->set_needs_review( Lst::includes( ICL_TM_NEEDS_REVIEW, $statuses ) );
 		}
 		$params->set_exclude_cancelled();
 
@@ -103,8 +96,8 @@ class WPML_TM_Rest_Jobs_Criteria_Parser {
 			$to   = $request->get_param( $date_range_value . '_to' );
 
 			if ( $from || $to ) {
-				$from = $from ? new DateTime( $from ) : $from;
-				$to   = $to ? new DateTime( $to ) : $to;
+				$from = $from ? new DateTime( $from ) : null;
+				$to   = $to ? new DateTime( $to ) : null;
 
 				if ( $from && $to && $from > $to ) {
 					continue;

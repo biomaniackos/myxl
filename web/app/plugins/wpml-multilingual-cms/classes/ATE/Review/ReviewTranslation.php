@@ -15,6 +15,7 @@ use WPML\TM\API\Jobs;
 use WPML\TM\API\Translators;
 use WPML\Core\WP\App\Resources;
 use WPML\FP\Obj;
+use WPML\TM\ATE\UpdateTranslation\UpdateTranslation;
 use function WPML\FP\pipe;
 use function WPML\FP\spreadArgs;
 
@@ -31,10 +32,27 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 			Hooks::onFilter( 'the_preview' )
 			     ->then( Hooks::getArgs( [ 0 => 'post' ] ) )
 			     ->then( $this->handleTranslationReview() );
+
+			if ( $this->isCurrentPageReview() ) {
+				add_filter(
+					'init',
+					function () {
+						// This hook is only needed for the WP Autosaved revision preview.
+						// For Translation Review it can cause problems overwritting the post by an autosaved draft.
+						remove_filter( 'the_preview', '_set_preview' );
+						return true;
+					},
+					PHP_INT_MAX
+				);
+			}
 		}
 
 		Hooks::onFilter( 'user_has_cap', 10, 3 )
 		     ->then( spreadArgs( function ( $userCaps, $requiredCaps, $args ) {
+				 /** @var array $userCaps */
+				 /** @var array $requiredCaps */
+				 /** @var array $args */
+
 			     if ( Relation::propEq( 0, 'edit_post', $args ) ) {
 				     $translator = Translators::getCurrent();
 
@@ -64,6 +82,10 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 
 			     return $allowedTranslators;
 		     } ) );
+
+		if ( $this->isCurrentPageReviewPostTypeTemplate() ) {
+			Hooks::onFilter( 'pre_render_block', 10, 2 )->then( spreadArgs( [ $this, 'onPreRenderBlock' ] ) );
+		}
 	}
 
 	private static function canEditLanguage( $translator, $job ) {
@@ -89,13 +111,17 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 		);
 	}
 
+	/**
+	 * @param int $jobId
+	 *
+	 * @return callable
+	 */
 	public function handleTranslationReview() {
 		return function ( $data ) {
 			$post  = Obj::prop( 'post', $data );
 			$jobId = filter_input( INPUT_GET, 'jobId', FILTER_SANITIZE_NUMBER_INT );
 			$filterTargetLanguages = Sanitize::stringProp('targetLanguages', $_GET)
 				? Str::split( ',', Sanitize::stringProp('targetLanguages', $_GET) ) : null;
-
 
 			if ( $jobId ) {
 				/**
@@ -109,13 +135,13 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 				do_action( 'wpml_tm_handle_translation_review', $jobId, $post );
 
 				Hooks::onFilter( 'wp_redirect' )
-				     ->then( [ __CLASS__, 'failGracefullyOnPreviewRedirection' ] );
+					 ->then( [ __CLASS__, 'failGracefullyOnPreviewRedirection' ] );
 
 				Hooks::onAction( 'template_redirect', PHP_INT_MAX )
-				     ->then( function () {
-					     Hooks::onAction( 'wp_footer' )
-					          ->then( [ __CLASS__, 'printReviewToolbarAnchor' ] );
-				     } );
+					 ->then( function () {
+						 Hooks::onAction( 'wp_footer' )
+							  ->then( [ __CLASS__, 'printReviewToolbarAnchor' ] );
+					 } );
 
 				show_admin_bar( false );
 
@@ -172,7 +198,7 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 				'completedInATE'      => $this->isCompletedInATE( $_GET ),
 				'isReturningFromATE'  => (bool) Obj::prop( 'editFromReviewPage', $_GET ),
 				'clickedBackInATE'    => (bool) Obj::prop( 'back', $_GET ),
-				'needsUpdate'         => Relation::propEq( 'review_status', ReviewStatus::EDITING, $job ),
+				'needsUpdate'         => is_object( $job ) ? Relation::propEq( 'review_status', ReviewStatus::EDITING, $job ) : false,
 				'previousTranslation' => Sanitize::stringProp( 'previousTranslation', $_GET ),
 				'backUrl'             => Obj::prop( 'returnUrl', $_GET ),
 				'endpoints'           => [
@@ -184,7 +210,10 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 	}
 
 	/**
-	 * @param array{complete_no_changes: string|null} $params
+	 * Returns completed status based on key 'complete_no_changes' in $params.
+	 * Returns NOT_COMPLETED if 'complete_no_changes' is not set.
+	 *
+	 * @param array $params
 	 *
 	 * @return string
 	 */
@@ -240,5 +269,46 @@ class ReviewTranslation implements \IWPML_Frontend_Action, \IWPML_Backend_Action
 		$returnParam = \add_query_arg( [ 'editFromReviewPage' => 1 ], $returnParam );
 
 		return $returnParam;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isCurrentPageReviewPostTypeTemplate() {
+		$queryVars = [];
+		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+			parse_str( $_SERVER['QUERY_STRING'], $queryVars );
+		}
+
+		return Obj::has( 'wpmlReviewPostType', $queryVars ) && 'wp_template' === $queryVars['wpmlReviewPostType'];
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isCurrentPageReview() {
+		$queryVars = [];
+		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+			parse_str( $_SERVER['QUERY_STRING'], $queryVars );
+		}
+
+		$jobId = filter_input( INPUT_GET, 'jobId', FILTER_SANITIZE_NUMBER_INT );
+		return !! $jobId || Obj::has( 'wpmlReviewPostType', $queryVars );
+	}
+
+	/**
+	 * This filter is called from WP core /wp-includes/blocks.php right before block is rendered.
+	 * If anything other than null is returned from this filter that value is used as final block rendered value without calling actual block render function.
+	 *
+	 * @param string|null $preRenderedContent Pre-rendered context for the block.
+	 * @param array       $blockParams Block params being rendered.
+	 *
+	 * @return string|null $context
+	 */
+	public function onPreRenderBlock( $preRenderedContent, $blockParams ) {
+		// Fixes error 'postId is not defined' in WP core when context vars are removed for posts with 'wp_template' type.
+		if ( is_array( $blockParams ) && 'core/comments' === $blockParams['blockName'] && $this->isCurrentPageReviewPostTypeTemplate() ) {
+			return '';
+		}
 	}
 }

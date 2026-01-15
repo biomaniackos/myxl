@@ -5,13 +5,16 @@
          "": {
             "domain": "messages",
             "plural_forms": "nplurals=2; plural=(n != 1);",
-            "lang": "en"
+            "lang": "nl_NL"
          },
          "Choose the image file type for flags": [
             "Kies het type beeldbestand voor vlaggen"
          ],
          "This option affects only the built-in WPML flags, not the custom uploaded ones.": [
             "Deze optie beïnvloedt alleen de ingebouwde WPML-vlaggen, niet de aangepaste geüploade vlaggen."
+         ],
+         "%s format": [
+            "%s opmaak"
          ],
          "Save": [
             "Opslaan"

@@ -2,8 +2,8 @@
 
 namespace WPMailSMTP\Admin;
 
-use WPMailSMTP\WP;
 use WPMailSMTP\Options;
+use WPMailSMTP\WP;
 
 /**
  * Class Area registers and process all wp-admin display functionality.
@@ -53,17 +53,15 @@ class Area {
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct() {
-
-		$this->hooks();
-	}
+	public function __construct() {}
 
 	/**
 	 * Assign all hooks to proper places.
 	 *
 	 * @since 1.0.0
+	 * @since 4.0.0 Changed visibility to public.
 	 */
-	protected function hooks() {
+	public function hooks() {
 
 		// Add the Settings link to a plugin on Plugins page.
 		add_filter( 'plugin_action_links_' . plugin_basename( WPMS_PLUGIN_FILE ), [ $this, 'add_plugin_action_link' ], 10, 1 );
@@ -498,6 +496,19 @@ class Area {
 			}
 		);
 
+		wp_register_style(
+			'wp-mail-smtp-admin-lity',
+			wp_mail_smtp()->assets_url . '/css/vendor/lity.min.css',
+			[],
+			'2.4.1'
+		);
+		wp_register_script(
+			'wp-mail-smtp-admin-lity',
+			wp_mail_smtp()->assets_url . '/js/vendor/lity.min.js',
+			[],
+			'2.4.1'
+		);
+
 		// General styles and js.
 		wp_enqueue_style(
 			'wp-mail-smtp-admin',
@@ -558,6 +569,10 @@ class Area {
 				'gmail'             => [
 					'one_click_setup_upgrade_title'   => wp_kses( __( 'One-Click Setup for Google Mailer <br> is a Pro Feature', 'wp-mail-smtp' ), [ 'br' => [] ] ),
 					'one_click_setup_upgrade_content' => esc_html__( 'We\'re sorry, One-Click Setup for Google Mailer is not available on your plan. Please upgrade to the Pro plan to unlock all these awesome features.', 'wp-mail-smtp' ),
+				],
+				'rate_limit'        => [
+					'upgrade_title'   => wp_kses( __( 'Email Rate Limiting <br> is a Pro Feature', 'wp-mail-smtp' ), [ 'br' => [] ] ),
+					'upgrade_content' => esc_html__( 'We\'re sorry, Email Rate Limiting is not available on your plan. Please upgrade to the Pro plan to unlock all these awesome features.', 'wp-mail-smtp' ),
 				],
 			],
 			'all_mailers_supports'    => wp_mail_smtp()->get_providers()->get_supports_all(),
@@ -667,6 +682,15 @@ class Area {
 			);
 		}
 
+		if (
+			$this->is_admin_page( 'general' ) &&
+			! wp_mail_smtp()->is_pro() &&
+			! get_user_meta( get_current_user_id(), 'wp_mail_smtp_pro_banner_dismissed', true )
+		) {
+			wp_enqueue_style( 'wp-mail-smtp-admin-lity' );
+			wp_enqueue_script( 'wp-mail-smtp-admin-lity' );
+		}
+
 		/**
 		 * Fires after enqueue plugin assets.
 		 *
@@ -713,7 +737,7 @@ class Area {
 	public function get_admin_footer( $text ) {
 
 		if ( $this->is_admin_page() ) {
-			$url = 'https://wordpress.org/support/plugin/wp-mail-smtp/reviews/?filter=5#new-post';
+			$url = 'https://wordpress.org/support/plugin/wp-mail-smtp/reviews/#new-post';
 
 			$text = sprintf(
 				wp_kses(
@@ -1227,16 +1251,23 @@ class Area {
 			return false;
 		}
 
-		if ( empty( $_POST['notice'] ) || empty( $_POST['mailer'] ) ) {
+		if ( empty( $_POST['notice'] ) ) {
 			return false;
 		}
 
 		$notice = sanitize_key( $_POST['notice'] );
-		$mailer = sanitize_key( $_POST['mailer'] );
 
-		update_user_meta( get_current_user_id(), "wp_mail_smtp_notice_{$notice}_for_{$mailer}_dismissed", true );
+		if ( ! empty( $_POST['mailer'] ) ) {
+			$mailer = sanitize_key( $_POST['mailer'] );
 
-		return esc_html__( 'Educational notice for this mailer was successfully dismissed.', 'wp-mail-smtp' );
+			update_user_meta( get_current_user_id(), "wp_mail_smtp_notice_{$notice}_for_{$mailer}_dismissed", true );
+
+			return esc_html__( 'Educational notice for this mailer was successfully dismissed.', 'wp-mail-smtp' );
+		} else {
+			update_user_meta( get_current_user_id(), "wp_mail_smtp_notice_{$notice}_dismissed", true );
+
+			return esc_html__( 'Notice was successfully dismissed.', 'wp-mail-smtp' );
+		}
 	}
 
 	/**
@@ -1399,7 +1430,7 @@ class Area {
 			array_filter(
 				$submenu[ self::SLUG ],
 				function ( $item ) {
-					return strpos( $item[2], 'https://wpmailsmtp.com/lite-upgrade' ) !== false;
+					return strpos( urldecode( $item[2] ), 'wpmailsmtp.com/lite-upgrade' ) !== false;
 				}
 			)
 		);
@@ -1416,6 +1447,15 @@ class Area {
 		} else {
 			$submenu[ self::SLUG ][ $upgrade_link_position ][] = 'wp-mail-smtp-sidebar-upgrade-pro';
 		}
+
+		$current_screen      = get_current_screen();
+		$upgrade_utm_content = $current_screen === null ? 'Upgrade to Pro' : 'Upgrade to Pro - ' . $current_screen->base;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$upgrade_utm_content = empty( $_GET['tab'] ) ? $upgrade_utm_content : $upgrade_utm_content . ' -- ' . sanitize_key( $_GET['tab'] );
+
+		// Add the correct utm_content to the menu item.
+		$submenu[ self::SLUG ][ $upgrade_link_position ][2] =
+			esc_url( wp_mail_smtp()->get_upgrade_link( [ 'medium' => 'admin-menu', 'content' => $upgrade_utm_content ] ) ); // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 		// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		// Output inline styles.
@@ -1509,11 +1549,11 @@ class Area {
 					</a>
 				</li>
 				<li>
-					<a href="https://twitter.com/wpmailsmtp" target="_blank" rel="noopener noreferrer">
-						<svg width="17" height="16" aria-hidden="true">
-							<path fill="#A7AAAD" d="M15.27 4.43A7.4 7.4 0 0 0 17 2.63c-.6.27-1.3.47-2 .53a3.41 3.41 0 0 0 1.53-1.93c-.66.4-1.43.7-2.2.87a3.5 3.5 0 0 0-5.96 3.2 10.14 10.14 0 0 1-7.2-3.67C.86 2.13.7 2.73.7 3.4c0 1.2.6 2.26 1.56 2.89a3.68 3.68 0 0 1-1.6-.43v.03c0 1.7 1.2 3.1 2.8 3.43-.27.06-.6.13-.9.13a3.7 3.7 0 0 1-.66-.07 3.48 3.48 0 0 0 3.26 2.43A7.05 7.05 0 0 1 0 13.24a9.73 9.73 0 0 0 5.36 1.57c6.42 0 9.91-5.3 9.91-9.92v-.46Z"/>
+					<a href="https://x.com/wpmailsmtp" target="_blank" rel="noopener noreferrer">
+						<svg width="17" height="17" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+							<path fill="#A7AAAD" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
 						</svg>
-						<span class="screen-reader-text"><?php echo esc_html( 'Twitter' ); ?></span>
+						<span class="screen-reader-text"><?php echo esc_html( 'X' ); ?></span>
 					</a>
 				</li>
 				<li>

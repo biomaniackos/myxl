@@ -57,7 +57,7 @@ class WPML_User_Language {
 
 		add_action( 'wpml_switch_language_for_email', array( $this, 'switch_language_for_email_action' ), 10, 1 );
 		add_action( 'wpml_restore_language_from_email', array( $this, 'restore_language_from_email_action' ), 10, 0 );
-		add_action( 'profile_update', array( $this, 'sync_admin_user_language_action' ), 10, 2 );
+		add_action( 'profile_update', array( $this, 'sync_admin_user_language_action' ), 10, 1 );
 		add_action( 'wpml_language_cookie_added', array( $this, 'update_user_lang_on_cookie_update' ) );
 
 		if ( $this->is_editing_current_profile() || $this->is_editing_other_profile() ) {
@@ -268,30 +268,26 @@ class WPML_User_Language {
 	}
 
 	public function add_how_to_set_notice() {
-		global $pagenow;
 		$adminNotices = wpml_get_admin_notices();
 
 		$noticeId    = self::class . 'how_to_set_notice';
 		$noticeGroup = self::class;
 
-		if (
-			$pagenow !== 'profile.php'
-			&& ! Option::getOr( WPLoginUrlConverter::SETTINGS_KEY, false )
-		) {
-			$notice = new WPML_Notice(
-				$noticeId,
-				self::getNotice(),
-				$noticeGroup
-			);
-			$notice->set_css_class_types( [ 'info' ] );
-			$notice->add_capability_check( [ 'manage_options' ] );
-			$notice->set_dismissible( true );
-			$notice->add_user_restriction( User::getCurrentId() );
-			$adminNotices->add_notice( $notice );
-		} else {
-			$adminNotices->remove_notice( $noticeGroup, $noticeId );
-		}
-
+        $notice = new WPML_Notice(
+            $noticeId,
+            self::getNotice(),
+            $noticeGroup
+        );
+        $notice->set_css_class_types( [ 'info' ] );
+        $notice->add_capability_check( [ 'manage_options' ] );
+        $notice->set_dismissible( true );
+        $notice->add_user_restriction( User::getCurrentId() );
+        $notice->add_display_callback(
+            [
+                self::class,
+                'displayNoticeOnlyOnWPDashboardAndWhenTranslationOfLoginAndRegistrationPagesIsDisabled'
+            ] );
+        $adminNotices->add_notice( $notice );
 	}
 
 	public static function getNotice() {
@@ -313,6 +309,12 @@ class WPML_User_Language {
 		<?php
 		return ob_get_clean();
 	}
+
+    public static function displayNoticeOnlyOnWPDashboardAndWhenTranslationOfLoginAndRegistrationPagesIsDisabled(): bool {
+	    global $pagenow;
+
+	    return $pagenow === 'index.php' && ! WPLoginUrlConverter::isEnabled();
+    }
 
 	public function show_ui_to_enable_login_translation() {
 		if ( current_user_can( 'manage_options' ) && ! WPLoginUrlConverter::isEnabled() ) {

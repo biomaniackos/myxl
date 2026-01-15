@@ -15,7 +15,7 @@ class WPML_TM_REST_AMS_Clients extends WPML_REST_Base {
 	private $translator_activation_records;
 
 	/**
-	 * @var WPML_TM_ATE_AMS_Endpoints
+	 * @var WPML_TM_MCS_ATE_Strings
 	 */
 	private $strings;
 
@@ -173,9 +173,6 @@ class WPML_TM_REST_AMS_Clients extends WPML_REST_Base {
 		$params = $request->get_json_params();
 
 		$result = $this->api->update_translation_engines( $params );
-		if ( ! is_wp_error( $result ) ) {
-			do_action( 'wpml_tm_ate_translation_engines_updated' );
-		}
 
 		return $result;
 	}

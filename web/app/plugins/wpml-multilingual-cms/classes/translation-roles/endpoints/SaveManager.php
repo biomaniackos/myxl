@@ -20,13 +20,13 @@ class SaveManager extends SaveUser {
 	public function run( Collection $data ) {
 
 		// $setRole :: WP_User -> WP_User
-		$setRole = Fns::tap( invoke( 'add_cap' )->with( \WPML_Manage_Translations_Role::CAPABILITY ) );
+		$setRole = Fns::tap( invoke( 'add_cap' )->with( User::CAP_MANAGE_TRANSLATIONS ) );
 
 		return self::getUser( $data )
 		           ->map( $setRole )
 		           ->map( [ self::class, 'sendInstructions' ] )
 		           ->map( function( $user ) {
-					   do_action( 'wpml_tm_ate_synchronize_managers' );
+					   do_action( 'wpml_tm_ate_synchronize_managers', $user->ID );
 					   return true;
 				   } );
 	}
@@ -67,6 +67,6 @@ class SaveManager extends SaveUser {
 
 		Hooks::callWithFilter( $sendMail, 'wp_mail_from_name', $forceDisplayName );
 
-		return true;
+		return $manager;
 	}
 }

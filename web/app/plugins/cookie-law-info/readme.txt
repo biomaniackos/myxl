@@ -3,9 +3,9 @@ Contributors: webtoffee, cookieyesdev
 Donate link: https://www.cookieyes.com/ 
 Tags: cookie notice, cookie consent, cookie banner, cookie, gdpr
 Requires at least: 5.0.0
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 3.3.7
+Stable tag: 3.3.9.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -78,7 +78,7 @@ Access the following features by subscribing to a premium plan (Basic, Pro, or U
 **Advanced Consent Management**
 
 &#9989; **Geo-Targeting:** Show region-specific banners (e.g., GDPR banner for EU, CCPA banner for California).
-&#9989; **IAB TCF v2.2 framework:** Full support for the Transparency and Consent Framework for publishers and advertisers.
+&#9989; **IAB TCF v2.3 framework:** Full support for the Transparency and Consent Framework for publishers and advertisers.
 &#9989; **Google's Additional Consent Mode:** Manage consent for Google’s Ad Tech Providers outside the IAB GVL.
 
 **Enhanced Banner Customization**
@@ -256,6 +256,22 @@ Every time we update the plugin, you will see a notification on the installed pl
 
 == Changelog ==
 
+= 3.3.9.1 =
+
+[Fix] - BF & CM banner not removed after deadline.
+
+= 3.3.9 =
+
+[Fix] - Updated scanner API in legacy plugin.
+[Add] - Redirect to plugin dashboard on Activate.
+[Add] - Handled auth token expiry case in Web App connection.
+[Enhancement] - Extra pageviews reporting in Pageviews graph.
+[Tweak] - IAB TCF v2.3 related updates in UI.
+
+= 3.3.8 =
+
+[Compatibility] – Tested OK with WordPress version 6.9
+
 = 3.3.7 =
 
 [Enhancement] - Try Pro for free option in Upgrade nudges.
@@ -280,8 +296,6 @@ For the changelog of earlier versions, please refer to the [changelog.txt](https
 
 == Upgrade Notice ==
 
-= 3.3.7 =
+= 3.3.9.1 =
 
-[Enhancement] - Try Pro for free option in Upgrade nudges.
-[Fix] - Minor fixes.
-[Tweak] - Updated review banner behaviour.
+[Fix] - BF & CM banner not removed after deadline.

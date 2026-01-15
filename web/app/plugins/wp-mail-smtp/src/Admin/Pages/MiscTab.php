@@ -5,6 +5,7 @@ namespace WPMailSMTP\Admin\Pages;
 use WPMailSMTP\Admin\Area;
 use WPMailSMTP\Admin\PageAbstract;
 use WPMailSMTP\Helpers\UI;
+use WPMailSMTP\OptimizedEmailSending;
 use WPMailSMTP\Options;
 use WPMailSMTP\UsageTracking\UsageTracking;
 use WPMailSMTP\Reports\Emails\Summary as SummaryReportEmail;
@@ -35,6 +36,7 @@ class MiscTab extends PageAbstract {
 	 * @return string
 	 */
 	public function get_label() {
+
 		return esc_html__( 'Misc', 'wp-mail-smtp' );
 	}
 
@@ -72,10 +74,30 @@ class MiscTab extends PageAbstract {
 
 			<!-- Do not send -->
 			<div id="wp-mail-smtp-setting-row-do_not_send" class="wp-mail-smtp-setting-row wp-mail-smtp-clear">
-				<div class="wp-mail-smtp-setting-label">
+				<div class="wp-mail-smtp-setting-label wp-mail-smtp-setting-label-with-tooltip">
 					<label for="wp-mail-smtp-setting-do_not_send">
 						<?php esc_html_e( 'Do Not Send', 'wp-mail-smtp' ); ?>
 					</label>
+					<span class="wp-mail-smtp-tooltip wp-mail-smtp-tooltip-with-icon">
+						<img src="<?php echo esc_url( wp_mail_smtp()->assets_url . '/images/font-awesome/info-circle.svg' ); ?>" width="15" height="15" alt="info"/>
+						<span class="wp-mail-smtp-tooltip-text wp-mail-smtp-tooltip-small-text">
+						<?php
+						printf(
+							wp_kses(
+								__( 'Some plugins, like BuddyPress and Events Manager, are using their own email delivery solutions. By default, this option does not block their emails, as those plugins do not use default <code>wp_mail()</code> function to send emails.', 'wp-mail-smtp' ),
+								[
+									'code' => [],
+								]
+							)
+						);
+						?>
+						<br>
+						<br>
+						<?php esc_html_e( 'You will need to consult with their documentation to switch them to use default WordPress email delivery.', 'wp-mail-smtp' ); ?>
+						<br>
+						<?php esc_html_e( 'Test emails are allowed to be sent, regardless of this option.', 'wp-mail-smtp' ); ?>
+						</span>
+					</span>
 				</div>
 				<div class="wp-mail-smtp-setting-field">
 					<?php
@@ -94,21 +116,6 @@ class MiscTab extends PageAbstract {
 					</p>
 					<p class="desc">
 						<?php
-						printf(
-							wp_kses(
-								__( 'Some plugins, like BuddyPress and Events Manager, are using their own email delivery solutions. By default, this option does not block their emails, as those plugins do not use default <code>wp_mail()</code> function to send emails.', 'wp-mail-smtp' ),
-								[
-									'code' => [],
-								]
-							)
-						);
-						?>
-						<br>
-						<?php esc_html_e( 'You will need to consult with their documentation to switch them to use default WordPress email delivery.', 'wp-mail-smtp' ); ?>
-						<br>
-						<?php esc_html_e( 'Test emails are allowed to be sent, regardless of this option.', 'wp-mail-smtp' ); ?>
-						<br>
-						<?php
 						if ( $options->is_const_defined( 'general', 'do_not_send' ) ) {
 							echo $options->get_const_set_message( 'WPMS_DO_NOT_SEND' ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						} else {
@@ -124,11 +131,39 @@ class MiscTab extends PageAbstract {
 									]
 								),
 								// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
-								esc_url( wp_mail_smtp()->get_utm_url( 'https://wpmailsmtp.com/docs/how-to-secure-smtp-settings-by-using-constants/', [ 'medium' => 'misc-settings', 'content' => 'Do not send setting description - support article' ] ) )
+								esc_url(
+									wp_mail_smtp()->get_utm_url(
+										'https://wpmailsmtp.com/docs/how-to-secure-smtp-settings-by-using-constants/',
+										[
+											'medium'  => 'misc-settings',
+											'content' => 'Do not send setting description - support article',
+										]
+									)
+								)
 							);
 						}
 						?>
 					</p>
+					<?php
+					if ( wp_mail_smtp()->is_pro() ) {
+						?>
+						<div style="margin-top: 10px; display: <?php echo (bool) $options->get( 'general', 'do_not_send' ) ? 'block' : 'none'; ?>;">
+							<label for="wp-mail-smtp-setting-log_blocked_emails">
+								<input type="checkbox"
+											 id="wp-mail-smtp-setting-log_blocked_emails"
+											 name="wp-mail-smtp[logs][log_blocked_emails]"
+											 value="true"
+									<?php checked( (bool) $options->get( 'logs', 'log_blocked_emails' ) ); ?>
+								/>
+								<?php esc_html_e( 'Log Blocked Emails', 'wp-mail-smtp' ); ?>
+							</label>
+							<p class="desc">
+								<?php esc_html_e( 'When selected, emails blocked by the "Do Not Send" option will be logged in the Email Log.', 'wp-mail-smtp' ); ?>
+							</p>
+						</div>
+						<?php
+					}
+					?>
 				</div>
 			</div>
 
@@ -158,7 +193,7 @@ class MiscTab extends PageAbstract {
 
 			<!-- Hide Email Delivery Errors -->
 			<div id="wp-mail-smtp-setting-row-email_delivery_errors_hidden"
-				class="wp-mail-smtp-setting-row wp-mail-smtp-clear">
+					 class="wp-mail-smtp-setting-row wp-mail-smtp-clear">
 				<div class="wp-mail-smtp-setting-label">
 					<label for="wp-mail-smtp-setting-email_delivery_errors_hidden">
 						<?php esc_html_e( 'Hide Email Delivery Errors', 'wp-mail-smtp' ); ?>
@@ -309,6 +344,55 @@ class MiscTab extends PageAbstract {
 				</div>
 			</div>
 
+			<!-- Optimize email sending -->
+			<div id="wp-mail-smtp-setting-row-optimize-email-sending" class="wp-mail-smtp-setting-row wp-mail-smtp-clear">
+				<div class="wp-mail-smtp-setting-label">
+					<label for="wp-mail-smtp-setting-optimize-email-sending">
+						<?php esc_html_e( 'Optimize Email Sending', 'wp-mail-smtp' ); ?>
+					</label>
+				</div>
+				<div class="wp-mail-smtp-setting-field">
+					<?php
+					UI::toggle(
+						[
+							'name'    => 'wp-mail-smtp[general][' . OptimizedEmailSending::SETTINGS_SLUG . ']',
+							'id'      => 'wp-mail-smtp-setting-optimize-email-sending',
+							'value'   => 'true',
+							'checked' => (bool) OptimizedEmailSending::is_enabled(),
+						]
+					);
+					?>
+					<p class="desc">
+						<?php
+						printf(
+							wp_kses( /* translators: %1$s - Documentation URL. */
+								__( 'Send emails asynchronously, which will make pages with email requests load faster, but may delay email delivery by a minute or two. <a href="%1$s" target="_blank" rel="noopener noreferrer">Learn More</a>', 'wp-mail-smtp' ),
+								[
+									'a' => [
+										'href'   => [],
+										'rel'    => [],
+										'target' => [],
+									],
+								]
+							),
+							esc_url(
+								wp_mail_smtp()->get_utm_url(
+									'https://wpmailsmtp.com/docs/a-complete-guide-to-miscellaneous-settings/#optimize-email-sending',
+									[
+										'medium'  => 'misc-settings',
+										'content' => 'Optimize Email Sending - support article',
+									]
+								)
+							)
+						);
+						?>
+					</p>
+				</div>
+			</div>
+
+			<!-- Rate limit -->
+			<?php $this->display_rate_limit_settings(); ?>
+
 			<!-- Uninstall -->
 			<div id="wp-mail-smtp-setting-row-uninstall" class="wp-mail-smtp-setting-row wp-mail-smtp-clear">
 				<div class="wp-mail-smtp-setting-label">
@@ -337,9 +421,60 @@ class MiscTab extends PageAbstract {
 			</div>
 
 			<?php $this->display_save_btn(); ?>
-
 		</form>
 
+		<?php
+	}
+
+	/**
+	 * Display rate limit settings.
+	 *
+	 * @since 4.0.0
+	 */
+	protected function display_rate_limit_settings() {
+
+		?>
+		<div id="wp-mail-smtp-setting-row-<?php echo esc_attr( $this->get_slug() ); ?>-rate_limit-lite" class="wp-mail-smtp-setting-row wp-mail-smtp-clear">
+			<div class="wp-mail-smtp-setting-label">
+				<label for="<?php echo 'wp-mail-smtp-setting-' . esc_attr( $this->get_slug() ) . '-rate_limit-lite'; ?>">
+					<?php esc_html_e( 'Email Rate Limiting', 'wp-mail-smtp' ); ?>
+				</label>
+			</div>
+			<div class="wp-mail-smtp-setting-field">
+				<?php
+				UI::toggle(
+					[
+						'id' => 'wp-mail-smtp-setting-' . esc_attr( $this->get_slug() ) . '-rate_limit-lite',
+					]
+				);
+				?>
+				<p class="desc">
+					<?php
+					printf(
+						wp_kses( /* translators: %1$s - Documentation URL. */
+							__( 'Limit the number of emails this site will send in each time interval (per minute, hour, day, week and month). Emails that will cross those set limits will be queued and sent as soon as your limits allow. <a href="%1$s" target="_blank" rel="noopener noreferrer">Learn More</a>', 'wp-mail-smtp' ),
+							[
+								'a' => [
+									'href'   => [],
+									'rel'    => [],
+									'target' => [],
+								],
+							]
+						),
+						esc_url(
+							wp_mail_smtp()->get_utm_url(
+								'https://wpmailsmtp.com/docs/a-complete-guide-to-miscellaneous-settings/#email-rate-limiting',
+								[
+									'medium'  => 'misc-settings',
+									'content' => 'Email Rate Limiting - support article',
+								]
+							)
+						)
+					);
+					?>
+				</p>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -361,6 +496,9 @@ class MiscTab extends PageAbstract {
 		if ( empty( $data['general']['do_not_send'] ) ) {
 			$data['general']['do_not_send'] = false;
 		}
+		if ( empty( $data['logs']['log_blocked_emails'] ) ) {
+			$data['logs']['log_blocked_emails'] = false;
+		}
 		if ( empty( $data['general']['am_notifications_hidden'] ) ) {
 			$data['general']['am_notifications_hidden'] = false;
 		}
@@ -378,6 +516,9 @@ class MiscTab extends PageAbstract {
 		}
 		if ( empty( $data['general'][ SummaryReportEmail::SETTINGS_SLUG ] ) ) {
 			$data['general'][ SummaryReportEmail::SETTINGS_SLUG ] = false;
+		}
+		if ( empty( $data['general'][ OptimizedEmailSending::SETTINGS_SLUG ] ) ) {
+			$data['general'][ OptimizedEmailSending::SETTINGS_SLUG ] = false;
 		}
 
 		$is_summary_report_email_opt_changed = $options->is_option_changed(

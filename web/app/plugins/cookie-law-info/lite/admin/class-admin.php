@@ -91,6 +91,7 @@ class Admin {
 		$this->load_modules();
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'load_plugin' ) );
+		add_action( 'activated_plugin', array( $this, 'handle_activation_redirect' ) );
 		add_filter( 'admin_body_class', array( $this, 'admin_body_classes' ) );
 		// Hide the unrelated admin notices.
 		add_action( 'admin_print_scripts', array( $this, 'hide_admin_notices' ) );
@@ -121,6 +122,7 @@ class Admin {
 				'type'        => 'info',
 			)
 		);
+		$notice->add( 'pageviews_overage_notice' );
 	}
 
 	/**
@@ -167,7 +169,6 @@ class Admin {
 			'pageviews',
 			'dashboard_widget',
 			'connect_banner',
-			'bfcm_banner',
 		);
 		return $modules;
 	}
@@ -651,6 +652,25 @@ class Admin {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Handle redirect after plugin activation.
+	 *
+	 * @param string $plugin Plugin basename.
+	 * @return void
+	 */
+	public function handle_activation_redirect( $plugin ) {
+		if ( CLI_PLUGIN_BASENAME !== $plugin ) {
+			return;
+		}
+		// Prevent redirect during AJAX, network admin, or if user doesn't have permission.
+		if ( wp_doing_ajax() || is_network_admin() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		// Redirect to dashboard.
+		wp_safe_redirect( admin_url( 'admin.php?page=cookie-law-info' ) );
+		exit;
 	}
 
 	/**

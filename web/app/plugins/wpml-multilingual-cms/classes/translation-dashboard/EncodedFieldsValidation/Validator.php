@@ -2,13 +2,10 @@
 
 namespace WPML\TM\TranslationDashboard\EncodedFieldsValidation;
 
-use WPML\FP\Fns;
-use WPML\FP\Logic;
 use WPML\FP\Lst;
 use WPML\FP\Obj;
 use WPML\LIB\WP\Post;
 use WPML\TM\TranslationDashboard\SentContentMessages;
-use function WPML\FP\invoke;
 use function WPML\FP\spreadArgs;
 
 class Validator {
@@ -82,6 +79,57 @@ class Validator {
 	}
 
 	/**
+	 * @param int[] $postIds
+	 * @param int[] $packageIds
+	 *
+	 * @return int[][]
+	 */
+	public function getInvalidPostAndPackageIds( $postIds, $packageIds ) {
+		$invalidPostIds    = [];
+		$invalidPackageIds = [];
+		$postIds           = array_unique( $postIds );
+		$packageIds        = array_unique( $packageIds );
+
+		if ( is_array( $postIds ) && ! empty( $postIds ) ) {
+			$invalidPostIds = $this->findElementsIdsWithEncodedFields( 'post', $postIds );
+		}
+
+		if ( is_array( $packageIds ) && ! empty( $packageIds ) ) {
+			$invalidPackageIds = $this->findElementsIdsWithEncodedFields( 'package', $packageIds );
+		}
+
+		return [ $invalidPostIds, $invalidPackageIds ];
+	}
+
+	/**
+	 * @param string $type
+	 * @param int[] $elementsIds
+	 *
+	 * @return int[]
+	 */
+	private function findElementsIdsWithEncodedFields( $type, $elementsIds ) {
+		$elementsIdsWithEncodedFields = [];
+
+		$extractElementId = function ( ErrorEntry $errorEntry ) {
+			return $errorEntry->elementId;
+		};
+
+		if ( 'post' === $type ) {
+			$elementsIdsWithEncodedFields = array_map(
+				$extractElementId,
+				$this->findPostsWithEncodedFields( $elementsIds )
+			);
+		} elseif ( 'package' === $type ) {
+			$elementsIdsWithEncodedFields = array_map(
+				$extractElementId,
+				$this->findPackagesWithEncodedFields( $elementsIds )
+			);
+		}
+
+		return $elementsIdsWithEncodedFields;
+	}
+
+	/**
 	 * Get list of ids of selected posts/packages
 	 *
 	 * @param 'post'|'package' $type
@@ -126,13 +174,22 @@ class Validator {
 	 */
 	private function findPostsWithEncodedFields( $postIds ) {
 		$appendPackage = function ( \WP_Post $post ) {
-			return [ $post, $this->package_helper->create_translation_package( $post->ID ) ];
+			$package = $this->package_helper->create_translation_package( $post->ID, true );
+			return [ $post, $package ];
 		};
 
 		$isFieldEncoded = function ( $field ) {
+			$decodedFieldData = base64_decode( $field['data'] );
+
 			return array_key_exists( 'format', $field )
-			       && 'base64' === $field['format']
-			       && $this->encoding_validation->is_base64( base64_decode( $field['data'] ) );
+			             && 'base64' === $field['format']
+			             && $this->encoding_validation->is_base64_with_100_chars_or_more( $decodedFieldData );
+
+			/**
+			 * @todo : we should handle not to block the whole job from being translated but instead we should exclude the problematic field from the job and send it to be translated without that field.
+			 * @todo check Youtrack ticket
+			 * @see : https://onthegosystems.myjetbrains.com/youtrack/issue/wpmldev-1694
+			 */
 		};
 
 		$getInvalidFieldData = function ( $field, $slug ) {
@@ -186,7 +243,7 @@ class Validator {
 		 */
 		$tryToGetError = function ( $package ) use ( $getInvalidFieldData ) {
 			$invalidFields = \wpml_collect( Obj::propOr( [], 'string_data', $package ) )
-				->filter( [ $this->encoding_validation, 'is_base64' ] )
+				->filter( [ $this->encoding_validation, 'is_base64_with_100_chars_or_more' ] )
 				->map( $getInvalidFieldData )
 				->values()
 				->toArray();

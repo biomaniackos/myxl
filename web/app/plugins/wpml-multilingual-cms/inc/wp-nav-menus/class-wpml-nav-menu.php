@@ -74,11 +74,11 @@ class WPML_Nav_Menu {
 		if ( $pagenow === 'nav-menus.php' ) {
 			add_action( 'admin_footer', array( $this, 'nav_menu_language_controls' ), 10 );
 
-			wp_enqueue_script( 'wp_nav_menus', ICL_PLUGIN_URL . '/res/js/wp-nav-menus.js', array( 'jquery' ), ICL_SITEPRESS_VERSION, true );
-			wp_enqueue_style( 'wp_nav_menus_css', ICL_PLUGIN_URL . '/res/css/wp-nav-menus.css', array(), ICL_SITEPRESS_VERSION, 'all' );
+			wp_enqueue_script( 'wp_nav_menus', ICL_PLUGIN_URL . '/res/js/wp-nav-menus.js', array( 'jquery' ), ICL_SITEPRESS_SCRIPT_VERSION, true );
+			wp_enqueue_style( 'wp_nav_menus_css', ICL_PLUGIN_URL . '/res/css/wp-nav-menus.css', array(), ICL_SITEPRESS_SCRIPT_VERSION, 'all' );
 
 			// filter posts by language
-			add_action( 'parse_query', array( $this, 'parse_query' ) );
+			add_action( 'parse_query', array( $this, 'action_parse_query' ) );
 		}
 
 		if ( is_admin() ) {
@@ -226,7 +226,7 @@ class WPML_Nav_Menu {
 		);
 		if ( ! empty( $untranslated_menu_items ) ) {
 			foreach ( $untranslated_menu_items as $item ) {
-				$sitepress->set_element_language_details( $item, 'post_nav_menu_item', null, $default_language );
+				$sitepress->set_element_language_details( $item, 'post_nav_menu_item', null, $default_language, null, true, true );
 			}
 		}
 	}
@@ -513,7 +513,7 @@ class WPML_Nav_Menu {
             SELECT lt.name AS language_name, l.code AS lang, COUNT(ts.translation_id) AS c
             FROM {$wpdb->prefix}icl_languages l
                 JOIN {$wpdb->prefix}icl_languages_translations lt ON lt.language_code = l.code
-                JOIN {$wpdb->prefix}icl_translations ts ON l.code = ts.language_code            
+                JOIN {$wpdb->prefix}icl_translations ts ON l.code = ts.language_code
             WHERE lt.display_language_code=%s
                 AND l.active = 1
                 AND ts.element_type = 'tax_nav_menu'
@@ -645,6 +645,14 @@ class WPML_Nav_Menu {
 
 		return $q;
 	}
+	/**
+	 * @param \WP_Query $q
+	 *
+	 * @return void
+	 */
+	public function action_parse_query( $q ) {
+		$this->parse_query( $q );
+	}
 
 	/**
 	 * @param mixed $val
@@ -710,7 +718,7 @@ class WPML_Nav_Menu {
 		}
 
 		if ( ( ! is_object( $args['menu'] ) ) && is_numeric( $args['menu'] ) ) {
-				$args['menu'] = wp_get_nav_menu_object( self::convert_nav_menu_id( $args['menu'] ) );
+				$args['menu'] = wp_get_nav_menu_object( self::convert_nav_menu_id( (int) $args['menu'] ) );
 		}
 
 		if ( ( ! is_object( $args['menu'] ) ) && is_string( $args['menu'] ) ) {

@@ -26,36 +26,50 @@ final class Email_Log {
 
 	/**
 	 * Post type slug.
+	 *
+	 * @since 1.166.0
 	 */
 	const POST_TYPE = 'gsk_email_log';
 
 	/**
 	 * Report frequency meta key.
+	 *
+	 * @since 1.166.0
 	 */
 	const META_REPORT_FREQUENCY = '_report_frequency';
 
 	/**
 	 * Batch ID meta key.
+	 *
+	 * @since 1.166.0
 	 */
 	const META_BATCH_ID = '_batch_id';
 
 	/**
 	 * Maximum length for stored log strings (MySQL utf8mb4 index safety).
+	 *
+	 * @since 1.166.0
 	 */
 	const META_STRING_MAX_LENGTH = 191;
 
 	/**
 	 * Send attempts meta key.
+	 *
+	 * @since 1.166.0
 	 */
 	const META_SEND_ATTEMPTS = '_send_attempts';
 
 	/**
 	 * Error details meta key.
+	 *
+	 * @since 1.166.0
 	 */
 	const META_ERROR_DETAILS = '_error_details';
 
 	/**
 	 * Report reference dates meta key.
+	 *
+	 * @since 1.166.0
 	 */
 	const META_REPORT_REFERENCE_DATES = '_report_reference_dates';
 
@@ -63,10 +77,133 @@ final class Email_Log {
 	 * Email log post statuses.
 	 *
 	 * Slugs must stay within the posts table varchar(20) limit.
+	 *
+	 * @since 1.166.0
 	 */
 	const STATUS_SENT      = 'gsk_email_sent';
 	const STATUS_FAILED    = 'gsk_email_failed';
 	const STATUS_SCHEDULED = 'gsk_email_scheduled';
+
+	/**
+	 * Extracts a normalized date range array from an email log post.
+	 *
+	 * @since 1.167.0
+	 *
+	 * @param mixed $email_log Potential email log post.
+	 * @return array|null
+	 */
+	public static function get_date_range_from_log( $email_log ) {
+		$decoded = self::validate_and_decode_email_log( $email_log );
+		if ( null === $decoded ) {
+			return null;
+		}
+
+		$normalized = array();
+		$keys       = array(
+			'startDate'        => 'startDate',
+			'sendDate'         => 'endDate',
+			'compareStartDate' => 'compareStartDate',
+			'compareEndDate'   => 'compareEndDate',
+		);
+
+		foreach ( $keys as $key => $alias ) {
+			if ( ! isset( $decoded[ $key ] ) ) {
+				continue;
+			}
+
+			$formatted = self::format_reference_date( $decoded[ $key ] );
+			if ( null !== $formatted ) {
+				$normalized[ $alias ] = $formatted;
+			}
+		}
+
+		if ( empty( $normalized['startDate'] ) || empty( $normalized['endDate'] ) ) {
+			return null;
+		}
+
+		return $normalized;
+	}
+
+	/**
+	 * Validates an email log and returns decoded reference date metadata.
+	 *
+	 * @since 1.167.0
+	 *
+	 * @param mixed $email_log Potential email log post.
+	 * @return array|null Decoded reference date metadata, or null on failure.
+	 */
+	protected static function validate_and_decode_email_log( $email_log ) {
+		if ( ! ( $email_log instanceof \WP_Post ) ) {
+			return null;
+		}
+
+		if ( self::POST_TYPE !== $email_log->post_type ) {
+			return null;
+		}
+
+		$raw = get_post_meta( $email_log->ID, self::META_REPORT_REFERENCE_DATES, true );
+		if ( empty( $raw ) ) {
+			return null;
+		}
+
+		if ( is_string( $raw ) ) {
+			$decoded = json_decode( $raw, true );
+			if ( JSON_ERROR_NONE !== json_last_error() ) {
+				return null;
+			}
+		} elseif ( is_array( $raw ) ) {
+			$decoded = $raw;
+		} else {
+			return null;
+		}
+
+		return $decoded;
+	}
+
+	/**
+	 * Validates and normalizes a reference date value into a UNIX timestamp.
+	 *
+	 * @since 1.167.0
+	 *
+	 * @param mixed $value Date value.
+	 * @return int|null UNIX timestamp or null on failure.
+	 */
+	protected static function validate_reference_date( $value ) {
+		if ( '' === $value || null === $value ) {
+			return null;
+		}
+
+		$timestamp = is_numeric( $value ) ? (int) $value : strtotime( $value );
+		if ( empty( $timestamp ) || $timestamp < 0 ) {
+			return null;
+		}
+
+		return $timestamp;
+	}
+
+	/**
+	 * Formats a timestamp or date string stored in reference date meta.
+	 *
+	 * @since 1.167.0
+	 *
+	 * @param mixed $value Date value.
+	 * @return string|null
+	 */
+	protected static function format_reference_date( $value ) {
+		$timestamp = self::validate_reference_date( $value );
+		if ( null === $timestamp ) {
+			return null;
+		}
+
+		if ( function_exists( 'wp_timezone' ) && function_exists( 'wp_date' ) ) {
+			$timezone = wp_timezone();
+			if ( $timezone ) {
+				return wp_date( 'Y-m-d', $timestamp, $timezone );
+			}
+		}
+
+		return gmdate( 'Y-m-d', $timestamp );
+	}
 
 	/**
 	 * Registers functionality through WordPress hooks.
@@ -311,21 +448,76 @@ final class Email_Log {
 			return '';
 		}
 
-		$keys      = array( 'startDate', 'sendDate', 'compareStartDate', 'compareEndDate' );
-		$raw_dates = (array) $value;
-		// Pre-seed ( 'startDate', 'sendDate', 'compareStartDate', 'compareEndDate' ) keys
-		// so missing timestamps normalize to 0 and consumers always see a full schema.
-		$normalized = array_fill_keys( $keys, 0 );
-
-		foreach ( $keys as $key ) {
-			if ( isset( $raw_dates[ $key ] ) ) {
-				$normalized[ $key ] = absint( $raw_dates[ $key ] );
-			}
-		}
-
-		$encoded = wp_json_encode( $normalized, JSON_UNESCAPED_UNICODE );
+		$normalized = self::normalize_reference_dates( (array) $value );
+		$encoded    = wp_json_encode( $normalized, JSON_UNESCAPED_UNICODE );
 
 		return is_string( $encoded ) ? $encoded : '';
+	}
+
+	/**
+	 * Normalizes reference date values into timestamps for storage.
+	 *
+	 * @since 1.170.0
+	 *
+	 * @param array $raw_dates Raw reference date values keyed by meta field.
+	 * @return array Normalized timestamps keyed by meta field.
+	 */
+	protected static function normalize_reference_dates( array $raw_dates ) {
+		$keys       = array( 'startDate', 'sendDate', 'compareStartDate', 'compareEndDate' );
+		$normalized = array();
+
+		foreach ( $keys as $key ) {
+			if ( ! isset( $raw_dates[ $key ] ) ) {
+				if ( 'compareStartDate' === $key || 'compareEndDate' === $key ) {
+					$normalized[ $key ] = 0;
+				}
+				continue;
+			}
+
+			$timestamp = self::normalize_reference_date_value( $raw_dates[ $key ] );
+
+			if ( null === $timestamp ) {
+				if ( 'compareStartDate' === $key || 'compareEndDate' === $key ) {
+					$normalized[ $key ] = 0;
+				}
+				continue;
+			}
+
+			// Store as integer timestamp.
+			$normalized[ $key ] = (int) $timestamp;
+		}
+
+		return $normalized;
+	}
+
+	/**
+	 * Normalizes a single reference date value into a timestamp.
+	 *
+	 * @since 1.170.0
+	 *
+	 * @param mixed $raw_value Date value.
+	 * @return int|null Normalized timestamp or null when invalid.
+	 */
+	protected static function normalize_reference_date_value( $raw_value ) {
+		if ( is_string( $raw_value ) ) {
+			$raw_value = trim( $raw_value );
+		}
+
+		if ( '' === $raw_value ) {
+			return null;
+		}
+
+		if ( is_numeric( $raw_value ) ) {
+			$timestamp = $raw_value;
+		} else {
+			$timestamp = strtotime( $raw_value );
+		}
+
+		if ( false === $timestamp || $timestamp <= 0 ) {
+			return null;
+		}
+
+		return $timestamp;
 	}
 
 	/**

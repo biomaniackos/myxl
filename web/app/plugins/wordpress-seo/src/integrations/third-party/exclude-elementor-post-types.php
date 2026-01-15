@@ -9,8 +9,6 @@ use Yoast\WP\SEO\Integrations\Abstract_Exclude_Post_Type;
  * Excludes certain Elementor-specific post types from the indexable table.
  *
  * Posts with these post types will not be saved to the indexable table.
- *
- * @phpcs:disable Yoast.NamingConventions.ObjectNameDepth.MaxExceeded
  */
 class Exclude_Elementor_Post_Types extends Abstract_Exclude_Post_Type {
 
@@ -18,7 +16,7 @@ class Exclude_Elementor_Post_Types extends Abstract_Exclude_Post_Type {
 	 * This integration is only active when the Elementor plugin
 	 * is installed and activated.
 	 *
-	 * @return array|string[] The conditionals.
+	 * @return string[] The conditionals.
 	 */
 	public static function get_conditionals() {
 		return [ Elementor_Activated_Conditional::class ];

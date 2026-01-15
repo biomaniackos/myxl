@@ -33,21 +33,6 @@
     {
       "type": "package",
       "package": {
-        "name": "private-plugin/advanced-custom-fields-pro",
-        "version": "5.11.1",
-        "type": "wordpress-muplugin",
-        "dist": {
-          "type": "zip",
-          "url": "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=b3JkZXJfaWQ9NTQyNTl8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE1LTA0LTE2IDEzOjQ3OjU3"
-        },
-        "require": {
-          "ffraenz/private-composer-installer": "^5.0"
-        }
-      }
-    },
-    {
-      "type": "package",
-      "package": {
         "name": "private-plugin/wpml-multilingual-cms",
         "version": "4.4.12",
         "type": "wordpress-plugin",
@@ -170,8 +155,7 @@
     "composer/installers": "^2.0",
     "log1x/acf-editor-palette": "^1.0",
     "oscarotero/env": "^2.1",
-    "php": ">=7.1",
-    "private-plugin/advanced-custom-fields-pro": "^5.10",
+    "php": "^8.3",
     "private-plugin/wp-rocket": "^3.9",
     "private-plugin/wpml-advanced-custom-fields-mutlilingual": "^1.8",
     "private-plugin/wpml-cms-navigation": "^1.5",
@@ -181,7 +165,7 @@
     "private-plugin/wpml-string-translation": "^3.1",
     "roots/bedrock-autoloader": "^1.0",
     "roots/bedrock-disallow-indexing": "^2.0",
-    "roots/wordpress": "6.8.3",
+    "roots/wordpress": "6.9",
     "roots/wp-config": "1.0.0",
     "roots/wp-password-bcrypt": "1.1.0",
     "vlucas/phpdotenv": "^5.4",

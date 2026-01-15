@@ -944,6 +944,7 @@ class SetupWizard {
 			// Disable the WPForms redirect after plugin activation.
 			if ( $slug === 'wpforms-lite' ) {
 				update_option( 'wpforms_activation_redirect', true );
+				add_option( 'wpforms_installation_source', 'wp-mail-smtp-setup-wizard' );
 			}
 
 			// Disable the AIOSEO redirect after plugin activation.
@@ -1203,19 +1204,14 @@ class SetupWizard {
 
 		check_ajax_referer( 'wpms-admin-nonce', 'nonce' );
 
-		$options = Options::init();
-		$mailer  = $options->get( 'mail', 'mailer' );
-		$email   = $options->get( 'mail', 'from_email' );
-		$domain  = '';
-
 		// Send the test mail.
 		$result = wp_mail(
-			$email,
+			$this->get_test_email_recipient(),
 			'WP Mail SMTP Automatic Email Test',
 			TestTab::get_email_message_text(),
-			array(
+			[
 				'X-Mailer-Type:WPMailSMTP/Admin/SetupWizard/Test',
-			)
+			]
 		);
 
 		if ( ! $result ) {
@@ -1226,13 +1222,18 @@ class SetupWizard {
 			wp_send_json_error();
 		}
 
+		$options    = Options::init();
+		$mailer     = $options->get( 'mail', 'mailer' );
+		$from_email = $options->get( 'mail', 'from_email' );
+		$domain     = '';
+
 		// Add the optional sending domain parameter.
 		if ( in_array( $mailer, [ 'mailgun', 'sendinblue', 'sendgrid' ], true ) ) {
 			$domain = $options->get( $mailer, 'domain' );
 		}
 
 		// Perform the domain checker API test.
-		$domain_checker = new DomainChecker( $mailer, $email, $domain );
+		$domain_checker = new DomainChecker( $mailer, $from_email, $domain );
 
 		if ( $domain_checker->has_errors() ) {
 			$this->update_completed_stat( false );
@@ -1245,6 +1246,42 @@ class SetupWizard {
 		$this->update_completed_stat( true );
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Get the test email recipient.
+	 *
+	 * @since 4.7.0
+	 *
+	 * @return string
+	 */
+	private function get_test_email_recipient() {
+
+		$options    = Options::init();
+		$mailer     = $options->get( 'mail', 'mailer' );
+		$from_email = $options->get( 'mail', 'from_email' );
+
+		/*
+		 * Some mailers in a test mode allows to send emails only to the registered
+		 * From email address, so we need to cover this case.
+		 */
+		$to_email = $from_email;
+
+		$mailer_specific_constant_name = 'WPMS_SETUP_WIZARD_TEST_' . strtoupper( $mailer ) . '_EMAIL_RECIPIENT';
+
+		if (
+			defined( $mailer_specific_constant_name ) &&
+			is_email( constant( $mailer_specific_constant_name ) )
+		) {
+			$to_email = constant( $mailer_specific_constant_name );
+		} elseif (
+			defined( 'WPMS_SETUP_WIZARD_TEST_EMAIL_RECIPIENT' ) &&
+			is_email( WPMS_SETUP_WIZARD_TEST_EMAIL_RECIPIENT )
+		) {
+			$to_email = WPMS_SETUP_WIZARD_TEST_EMAIL_RECIPIENT;
+		}
+
+		return $to_email;
 	}
 
 	/**
@@ -1430,6 +1467,7 @@ class SetupWizard {
 			'WPMS_ZOHO_DOMAIN'                   => [ 'zoho', 'domain' ],
 			'WPMS_ZOHO_CLIENT_ID'                => [ 'zoho', 'client_id' ],
 			'WPMS_ZOHO_CLIENT_SECRET'            => [ 'zoho', 'client_secret' ],
+			'WPMS_RESEND_API_KEY'                => [ 'resend', 'api_key' ],
 			'WPMS_SMTP_HOST'                     => [ 'smtp', 'host' ],
 			'WPMS_SMTP_PORT'                     => [ 'smtp', 'port' ],
 			'WPMS_SSL'                           => [ 'smtp', 'encryption' ],

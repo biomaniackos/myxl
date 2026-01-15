@@ -319,6 +319,7 @@ class Upgrade extends Modules {
 			$accept_button = has_shortcode( $settings['notify_message'], 'cookie_accept_all' ) ? 'button_7' : 'button_1';
 
 			$buttons_config['accept']    = isset( $buttons_config['accept'] ) ? $this->prepare_buttons( $accept_button, $buttons_config['accept'] ) : array();
+			$buttons_config['accept']['status'] = true; // Always enable accept button
 			$buttons_config['reject']    = isset( $buttons_config['reject'] ) ? $this->prepare_buttons( 'button_3', $buttons_config['reject'] ) : array();
 			$buttons_config['settings']  = isset( $buttons_config['settings'] ) ? $this->prepare_buttons( 'button_4', $buttons_config['settings'] ) : array();
 			$buttons_config['donotSell'] = isset( $buttons_config['donotSell'] ) ? $this->prepare_buttons( 'button_6', $buttons_config['donotSell'] ) : array();

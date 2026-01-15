@@ -5,7 +5,7 @@
          "": {
             "domain": "messages",
             "plural_forms": "nplurals=2; plural=(n != 1);",
-            "lang": "en"
+            "lang": "sv_SE"
          },
          "Advanced": [
             "Avancerat"
@@ -14,7 +14,7 @@
             "HTML-ankare"
          ],
          "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
-            "Lägg till en genväg till det här blocket när du ladder sidan med hjälp av URL \"#anchor\"."
+            "Lägg till en genväg till detta block när sidan laddas med hjälp av “#anchor” URL:en."
          ],
          "Additional CSS class(es)": [
             "Ytterligare CSS-klass(er)"
@@ -25,6 +25,12 @@
          "Color": [
             "Färg"
          ],
+         "px": [
+            "px"
+         ],
+         "%": [
+            "%"
+         ],
          "Dimensions": [
             "Dimensioner"
          ],
@@ -32,7 +38,7 @@
             "BLOCK"
          ],
          "Block margin": [
-            "Blockmarginal"
+            "Blockmarginaler"
          ],
          "Block padding": [
             "Blockutfyllnad"
@@ -41,13 +47,13 @@
             "SPRÅK"
          ],
          "Language spacing": [
-            "Språk avstånd"
+            "Språkavstånd"
          ],
          "Language padding": [
             "Språkutfyllnad"
          ],
          "Display": [
-            "Bildskärm"
+            "Visning"
          ],
          "Show flag": [
             "Visa flagga"
@@ -56,7 +62,7 @@
             "Visa språknamn"
          ],
          "Display language name in": [
-            "Visa språknamnet i"
+            "Visa språknamn i"
          ],
          "Style": [
             "Stil"
@@ -80,7 +86,7 @@
             "Öppna vid klick"
          ],
          "Show arrow": [
-            "Visa pilen"
+            "Visa pil"
          ],
          "Layout": [
             "Layout"
@@ -98,58 +104,82 @@
             "Bakgrund"
          ],
          "Language Text": [
-            "Språk Text"
+            "Språktext"
          ],
          "Language Background": [
             "Språkbakgrund"
          ],
          "Current language text": [
-            "Text på aktuellt språk"
+            "Aktuell språktext"
          ],
          "Current language background": [
             "Aktuell språkbakgrund"
          ],
+         "Full name": [
+            "Fullständigt namn"
+         ],
          "Code": [
             "Kod"
+         ],
+         "Justify items left": [
+            "Justera objekt till vänster"
+         ],
+         "Justify items center": [
+            "Centrera objekt"
+         ],
+         "Justify items right": [
+            "Justera objekt till höger"
+         ],
+         "Justify items space between": [
+            "Fördela objekt jämnt"
+         ],
+         "Horizontal": [
+            "Horisontell"
+         ],
+         "Vertical": [
+            "Vertikal"
          ],
          "Normal": [
             "Normal"
          ],
          "Medium": [
-            "Medelstor"
+            "Medium"
          ],
          "Large": [
             "Stor"
          ],
          "X-Large": [
-            "X-Large"
+            "Extra stor"
+         ],
+         "Ab": [
+            "Ab"
+         ],
+         "AB": [
+            "AB"
+         ],
+         "ab": [
+            "ab"
          ],
          "Small": [
             "Liten"
          ],
          "Displays the WPML Language Switcher.": [
-            "Visar WPML:s språkväxlare."
+            "Visar WPML språkväljaren."
          ],
          "Language Switcher": [
-            "Språkväxlare"
+            "Språkväljare"
          ],
          "displays the WPML Language Switcher": [
-            "visar WPML-språkväxlaren "
+            "visar WPML språkväljaren"
+         ],
+         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
+            "Visar WPML språkväljaren. <br/> Lär dig <a>hur du översätter detta block</a>."
          ],
          "Navigation Language Switcher": [
-            "Språkväxlare för navigering"
+            "Navigeringsspråkväljare"
          ],
          "Reset all": [
             "Återställ alla"
-         ],
-         "Minimum value is : ": [
-            "Minsta värde är:"
-         ],
-         "Maximum value is : ": [
-            "Högsta värde är:"
-         ],
-         "Value must be a number!": [
-            "Värdet måste vara ett tal!"
          ]
       }
    }

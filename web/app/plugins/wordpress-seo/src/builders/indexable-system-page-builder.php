@@ -10,15 +10,13 @@ use Yoast\WP\SEO\Values\Indexables\Indexable_Builder_Versions;
  * System page builder for the indexables.
  *
  * Formats system pages ( search and error ) meta to indexable format.
- *
- * @phpcs:disable Yoast.NamingConventions.ObjectNameDepth.MaxExceeded
  */
 class Indexable_System_Page_Builder {
 
 	/**
 	 * Mapping of object type to title option keys.
 	 */
-	const OPTION_MAPPING = [
+	public const OPTION_MAPPING = [
 		'search-result' => [
 			'title'            => 'title-search-wpseo',
 		],
@@ -48,10 +46,7 @@ class Indexable_System_Page_Builder {
 	 * @param Options_Helper             $options  The options helper.
 	 * @param Indexable_Builder_Versions $versions The latest version of each Indexable Builder.
 	 */
-	public function __construct(
-		Options_Helper $options,
-		Indexable_Builder_Versions $versions
-	) {
+	public function __construct( Options_Helper $options, Indexable_Builder_Versions $versions ) {
 		$this->options = $options;
 		$this->version = $versions->get_latest_version_for_type( 'system-page' );
 	}

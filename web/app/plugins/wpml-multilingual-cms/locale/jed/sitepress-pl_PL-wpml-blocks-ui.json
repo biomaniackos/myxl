@@ -4,56 +4,62 @@
       "messages": {
          "": {
             "domain": "messages",
-            "plural_forms": "nplurals=2; plural=(n != 1);",
-            "lang": "en"
+            "plural_forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "pl_PL"
          },
          "Advanced": [
             "Zaawansowane"
          ],
          "HTML anchor": [
-            "kotwica HTML"
+            "Kotwica HTML"
          ],
          "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
-            "Dodaj skrót do tego bloku podczas wczytywania strony, korzystając z URL \"#kotwica\"."
+            "Dodaj skrót do tego bloku podczas ładowania strony, używając adresu URL „#anchor”."
          ],
          "Additional CSS class(es)": [
-            "Dodatkowe klasy CSS"
+            "Dodatkowa klasa(y) CSS"
          ],
          "Separate multiple classes with spaces.": [
-            "Rozdziel wiele klas spacjami."
+            "Oddziel wiele klas spacjami."
          ],
          "Color": [
             "Kolor"
+         ],
+         "px": [
+            "px"
+         ],
+         "%": [
+            "%"
          ],
          "Dimensions": [
             "Wymiary"
          ],
          "BLOCK": [
-            "Blokowy"
+            "BLOK"
          ],
          "Block margin": [
             "Margines bloku"
          ],
          "Block padding": [
-            "Odstęp bloku"
+            "Wypełnienie bloku"
          ],
          "LANGUAGE": [
             "JĘZYK"
          ],
          "Language spacing": [
-            "Margines zewnętrzny języka"
+            "Odstępy między językami"
          ],
          "Language padding": [
-            "Margines wewnętrzny języka"
+            "Wypełnienie języka"
          ],
          "Display": [
-            "Wyświetl"
+            "Wyświetlanie"
          ],
          "Show flag": [
-            "Wyświetl flagę"
+            "Pokaż flagę"
          ],
          "Show language name": [
-            "Wyświetl nazwę języka"
+            "Pokaż nazwę języka"
          ],
          "Display language name in": [
             "Wyświetl nazwę języka w"
@@ -71,22 +77,22 @@
             "Wysokość"
          ],
          "Spacing": [
-            "Margines zewnętrzny"
+            "Odstępy"
          ],
          "Allow wrapping to multiple lines": [
-            "Zezwalaj na zawijanie wierszy"
+            "Zezwól na zawijanie do wielu linii"
          ],
          "Open on click": [
             "Otwórz po kliknięciu"
          ],
          "Show arrow": [
-            "Wyświetl strzałkę"
+            "Pokaż strzałkę"
          ],
          "Layout": [
             "Układ"
          ],
          "Justification": [
-            "Justowanie"
+            "Wyrównanie"
          ],
          "Orientation": [
             "Orientacja"
@@ -101,16 +107,37 @@
             "Tekst języka"
          ],
          "Language Background": [
-            "Tło dla języka"
+            "Tło języka"
          ],
          "Current language text": [
-            "Tekst w bieżącym języku"
+            "Tekst bieżącego języka"
          ],
          "Current language background": [
-            "Tło dla bieżącego języka"
+            "Tło bieżącego języka"
+         ],
+         "Full name": [
+            "Pełna nazwa"
          ],
          "Code": [
             "Kod"
+         ],
+         "Justify items left": [
+            "Wyrównaj elementy do lewej"
+         ],
+         "Justify items center": [
+            "Wyrównaj elementy do środka"
+         ],
+         "Justify items right": [
+            "Wyrównaj elementy do prawej"
+         ],
+         "Justify items space between": [
+            "Wyrównaj elementy z odstępami"
+         ],
+         "Horizontal": [
+            "Poziomo"
+         ],
+         "Vertical": [
+            "Pionowo"
          ],
          "Normal": [
             "Normalny"
@@ -122,7 +149,7 @@
             "Duży"
          ],
          "X-Large": [
-            "X-Duży"
+            "Bardzo duży"
          ],
          "Ab": [
             "Ab"
@@ -134,31 +161,25 @@
             "ab"
          ],
          "Small": [
-            "Mała"
+            "Mały"
          ],
          "Displays the WPML Language Switcher.": [
-            "Wyświetla Przełącznik Języków WPML."
+            "Wyświetla przełącznik języków WPML."
          ],
          "Language Switcher": [
-            "Przełącznik języka"
+            "Przełącznik języków"
          ],
          "displays the WPML Language Switcher": [
-            "wyświetla Przełącznik Języków WPML."
+            "wyświetla przełącznik języków WPML"
+         ],
+         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
+            "Wyświetla przełącznik języków WPML. <br/> Dowiedz się <a>jak przetłumaczyć ten blok</a>."
          ],
          "Navigation Language Switcher": [
-            "Przełącznik Nawigacji Języków"
+            "Nawigacyjny przełącznik języków"
          ],
          "Reset all": [
             "Resetuj wszystko"
-         ],
-         "Minimum value is : ": [
-            "Wartość minimalna to : "
-         ],
-         "Maximum value is : ": [
-            "Wartość maksymalna to : "
-         ],
-         "Value must be a number!": [
-            "Wartość musi być liczbą!"
          ]
       }
    }

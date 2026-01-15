@@ -34,6 +34,53 @@
   margin-top: 20px;
   margin-bottom: -10px;
 }
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage {
+  margin-top: 30px;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 0px;
+  background: #E7F0FF;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content {
+  padding: 0px 15px;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message {
+  padding: 0px;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice {
+  justify-content: space-between;
+  gap: 16px;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice .cky-pageviews-message-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  flex: 1 0 0;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice .cky-pageviews-message-container h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1C1B1F;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice .cky-pageviews-message-container p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4E4B66;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice .cky-pageviews-message-container p a {
+  text-decoration: underline;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice .cky-pageviews-message-container p .cky-learn-more-arrow {
+  color: #1863dc;
+  font-weight: 500;
+}
+.cky-app-wrap .cky-admin-notice.cky-notice-pageviews-overage .cky-admin-notice-content .cky-admin-notice-message .cky-pageviews-overage-notice .cky-pageviews-actions {
+  flex-shrink: 0;
+  align-content: center;
+}
 .cky-app-wrap .cky-admin-notice.cky-notice-suspended {
   margin-top: 30px;
   border-radius: 5px;

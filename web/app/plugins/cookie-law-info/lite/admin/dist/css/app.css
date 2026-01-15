@@ -53,24 +53,6 @@
   font-weight: 600;
   font-size: 15px;
 }
-.cky-app-wrap .cky-nav-menu-item.cky-nav-menu-item-bfcm-active {
-  color: #136fe8;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 20px;
-  position: relative;
-  padding-top: 4px;
-  padding-bottom: 0;
-}
-.cky-app-wrap .cky-nav-menu-item.cky-nav-menu-item-bfcm-active::after {
-  content: "";
-  position: absolute;
-  bottom: -14px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background-color: #136fe8;
-}
 .cky-app-wrap .cky-nav-menu-item:first-child {
   margin-left: 0px;
 }
@@ -84,7 +66,6 @@
   padding: 0px 32px;
   background: #ffffff;
   box-shadow: 0 3px 8px -10px #000;
-  height: 48px;
 }
 .cky-nav-menu .cky-upgrade-col {
   gap: 8px;
@@ -198,131 +179,6 @@
 }
 .cky-app-wrap .cky-flex .cky-button-outline-secondary {
   margin-left: 10px;
-}
-.cky-bfcm-banner[data-v-482f98af] {
-  margin-left: -20px;
-  margin-right: -20px;
-  background-image: url(../img/bfcm-bg.svg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 12px 17px 12px 8px;
-  overflow: hidden;
-  box-shadow: 0 8px 26px -4px rgba(39, 40, 60, 0.2);
-  margin-bottom: 0;
-  position: relative;
-}
-.cky-bfcm-banner-content[data-v-482f98af] {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  position: relative;
-  z-index: 1;
-}
-.cky-bfcm-logo-wrapper[data-v-482f98af] {
-  position: relative;
-  flex-shrink: 0;
-}
-.cky-bfcm-logo[data-v-482f98af] {
-  display: block;
-  height: auto;
-  width: auto;
-}
-.cky-bfcm-message[data-v-482f98af] {
-  flex: 1;
-  gap: 8px;
-}
-.cky-bfcm-message-title[data-v-482f98af] {
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 27px;
-  color: #ffffff;
-  margin: 0;
-}
-.cky-bfcm-message-subtitle[data-v-482f98af] {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: #ffffff;
-  margin: 0;
-}
-.cky-bfcm-message-subtitle[data-v-482f98af] .cky-bfcm-highlight {
-  font-weight: 700;
-  color: #FFA500;
-}
-.cky-bfcm-actions[data-v-482f98af] {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  flex-shrink: 0;
-}
-.cky-bfcm-deadline[data-v-482f98af] {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.cky-bfcm-deadline-icon-img[data-v-482f98af] {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  animation: pulse-482f98af 2s infinite;
-}
-@keyframes pulse-482f98af {
-0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-}
-50% {
-    opacity: 0.8;
-    transform: scale(1.1);
-}
-}
-.cky-bfcm-deadline-text[data-v-482f98af] {
-  color: #ffffff;
-}
-.cky-bfcm-close[data-v-482f98af] {
-  position: absolute;
-  top: 6px;
-  right: 12px;
-  font-size: 20px;
-  font-weight: 300;
-  background: transparent;
-  border: none;
-  color: #7e7e7e;
-  cursor: pointer;
-  padding: 0;
-  z-index: 10;
-}
-.cky-bfcm-close[data-v-482f98af]:hover {
-  opacity: 0.7;
-}
-@media (max-width: 1200px) {
-.cky-bfcm-banner-content[data-v-482f98af] {
-    flex-wrap: wrap;
-    gap: 24px;
-}
-.cky-bfcm-actions[data-v-482f98af] {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-}
-}
-@media (max-width: 782px) {
-.cky-bfcm-banner[data-v-482f98af] {
-    padding: 16px;
-}
-.cky-bfcm-banner-content[data-v-482f98af] {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-}
-.cky-bfcm-logo[data-v-482f98af] {
-    width: 100%;
-}
-.cky-bfcm-message-title[data-v-482f98af] {
-    font-size: 16px;
-    line-height: 24px;
-}
 }
 @charset "UTF-8";
 .fade-enter-active {
@@ -643,9 +499,6 @@
   position: relative;
   padding-top: 108px;
 }
-.cky-app-wrap.cky-bfcm-active.cky-dashboard-route .cky-app-body {
-  padding-top: 179px;
-}
 .cky-app-wrap .cky-app-body-without-nav {
   padding-top: 60px;
 }
@@ -675,6 +528,20 @@
 }
 .cky-app-wrap .cky-section .cky-section-title {
   margin-right: 15px;
+}
+.cky-app-wrap .cky-session-expired {
+  margin: 30px 80px 0;
+  padding: 48px 65px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d9d9d9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-height: 610px;
+  gap: 26px;
 }
 .cky-app-wrap .cky-stats-section {
   flex-wrap: wrap;
@@ -2954,6 +2821,18 @@ fieldset[disabled] .cky-app-wrap .cky-select {
   align-items: center;
   justify-content: center;
 }
+
+.cky-extra-pageviews-text[data-v-032d0ffd] {
+    font-size: 12px;
+    font-style: italic;
+    margin-left: -20px;
+}
+.cky-overage-note[data-v-032d0ffd] {
+    margin-top: 12px;
+    margin-left: 86px;
+    margin-right: 120px;
+}
+
 .cky-spinner {
   display: inline-flex;
 }

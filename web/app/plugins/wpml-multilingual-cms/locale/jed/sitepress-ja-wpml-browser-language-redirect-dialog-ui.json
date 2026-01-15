@@ -4,8 +4,8 @@
       "messages": {
          "": {
             "domain": "messages",
-            "plural_forms": "nplurals=2; plural=(n != 1);",
-            "lang": "en"
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ja"
          },
          "How Browser Language Redirect Affects Google Indexing": [
             "ブラウザ言語リダイレクトが、Google Indexingに影響を与える理由"

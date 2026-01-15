@@ -1,6 +1,7 @@
 <?php
 
-use WPML\TM\ATE\ClonedSites\FingerprintGenerator;
+use WPML\FP\Maybe;
+use WPML\TM\ATE\API\FingerprintGenerator;
 use WPML\TM\ATE\Log\Entry;
 use WPML\TM\ATE\Log\Storage;
 use WPML\TM\ATE\Log\EventsTypes;
@@ -12,6 +13,8 @@ use WPML\TM\ATE\API\ErrorMessages;
 use WPML\FP\Fns;
 use function WPML\FP\pipe;
 use WPML\FP\Logic;
+use WPML\TM\ATE\API\CachedAMSAPI;
+
 use function WPML\FP\invoke;
 /**
  * @author OnTheGo Systems
@@ -35,7 +38,6 @@ class WPML_TM_AMS_API {
 	 * @var FingerprintGenerator
 	 */
 	private $fingerprintGenerator;
-
 
 	/**
 	 * WPML_TM_ATE_API constructor.
@@ -152,7 +154,7 @@ class WPML_TM_AMS_API {
 	}
 
 	/**
-	 * @return WP_Error|null
+	 * @return mixed|WP_Error|null
 	 */
 	public function get_translation_engines() {
 		$result = null;
@@ -168,10 +170,40 @@ class WPML_TM_AMS_API {
 		return $result;
 	}
 
+
+	/**
+	 * @return mixed|WP_Error|null
+	 */
+	public function get_available_formalities() {
+		$result = null;
+
+		$url = $this->endpoints->get_available_formalities();
+		$response = $this->signed_request( 'GET', $url );
+		if ( $this->response_has_body( $response ) ) {
+			$result = $this->get_errors( $response );
+			if ( ! is_wp_error( $result ) ) {
+				$result = json_decode( $response['body'], true );
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * @return mixed|WP_Error|null
+	 */
+	public function getGlossaryCount() {
+		$result = $this->getSignedResult(
+			'GET',
+			$this->endpoints->get_glossary_counts()
+		);
+
+		return Maybe::of( $result )->reject( 'is_wp_error' );
+	}
+
 	/**
 	 * @param $engine_settings
 	 *
-	 * @return bool
+	 * @return bool|WP_Error
 	 */
 	public function update_translation_engines( $engine_settings ) {
 		$result = false;
@@ -182,6 +214,9 @@ class WPML_TM_AMS_API {
 			$result = $this->get_errors( $response );
 			if ( ! is_wp_error( $result ) ) {
 				$result = json_decode( $response['body'], true );
+
+				CachedAMSAPI::clearCache();
+				do_action( 'wpml_tm_ate_translation_engines_updated' );
 
 				return \WPML\FP\Obj::propOr( false, 'success', $result );
 			}
@@ -342,25 +377,87 @@ class WPML_TM_AMS_API {
 	/**
 	 * Gets the data required by AMS to register a user.
 	 *
+	 * Ensures that critical user fields (email and display_name) are never empty.
+	 * If they are empty, generates fallback values and persists them to the database.
+	 *
 	 * @param WP_User $wp_user           The user from which data should be extracted.
 	 * @param bool    $with_name_details True if name details should be included.
 	 *
-	 * @return array
+	 * @return array User data array with 'email' and 'name' or detailed name fields.
 	 */
 	private function get_user_data( WP_User $wp_user, $with_name_details = false ) {
 		$data = array();
 
-		$data['email'] = $wp_user->user_email;
+		// wpmldev-5943
+		$data['email'] = $this->ensure_user_email_is_not_empty( $wp_user );
+		// wpmldev-5943
+		$display_name = $this->ensure_display_name_is_not_empty( $wp_user, $data['email'] );
 
+		// Add name fields based on requirements.
 		if ( $with_name_details ) {
-			$data['display_name'] = $wp_user->display_name;
+			$data['display_name'] = $display_name;
 			$data['first_name']   = $wp_user->first_name;
 			$data['last_name']    = $wp_user->last_name;
 		} else {
-			$data['name'] = $wp_user->display_name;
+			$data['name'] = $display_name;
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Ensures user has a valid email address.
+	 *
+	 * If the user's email is empty, generates a placeholder email
+	 * and updates the user in the database.
+	 *
+	 * @param WP_User $wp_user The user object.
+	 *
+	 * @return string The user's email (real or generated).
+	 */
+	private function ensure_user_email_is_not_empty( WP_User $wp_user ) {
+		if ( ! empty( $wp_user->user_email ) ) {
+			return $wp_user->user_email;
+		}
+
+		$fake_email = 'noreply-user-' . $wp_user->ID . '@placeholder.test';
+
+		wp_update_user(
+			array(
+				'ID'         => $wp_user->ID,
+				'user_email' => $fake_email,
+			)
+		);
+
+		return $fake_email;
+	}
+
+	/**
+	 * Ensures user has a valid display name.
+	 *
+	 * If the user's display name is empty, uses user_login as fallback,
+	 * or the email if user_login is also empty. Updates the user in the database.
+	 *
+	 * @param WP_User $wp_user       The user object.
+	 * @param string  $default_value The default value (used as final fallback).
+	 *
+	 * @return string The user's display name (real or generated).
+	 */
+	private function ensure_display_name_is_not_empty( WP_User $wp_user, string $default_value ) {
+		if ( ! empty( $wp_user->display_name ) ) {
+			return $wp_user->display_name;
+		}
+
+		$display_name = ! empty( $wp_user->user_login ) ? $wp_user->user_login : $default_value;
+
+		wp_update_user(
+			array(
+				'ID'           => $wp_user->ID,
+				'display_name' => $display_name,
+			)
+		);
+
+		return $display_name;
 	}
 
 	private function prepareClonedSiteArguments( $method ) {
@@ -393,6 +490,19 @@ class WPML_TM_AMS_API {
 		return $this->processReport(
 			$this->endpoints->get_ams_site_move(),
 			'PUT'
+		);
+	}
+
+	/**
+	 * @param string $migrationCode
+	 *
+	 * @return array|WP_Error
+	 */
+	public function reportCopiedSiteWithCreditTransfer( $migrationCode ) {
+		return $this->processReport(
+			$this->endpoints->get_ams_copy_attached(),
+			'POST',
+			[ 'migration_code' => $migrationCode ]
 		);
 	}
 
@@ -490,12 +600,13 @@ class WPML_TM_AMS_API {
 	 *
 	 * @return array|WP_Error
 	 */
-	private function processReport( $url, $method ) {
+	private function processReport( $url, $method, $queryParams = [] ) {
 		$args = $this->prepareClonedSiteArguments( $method );
 
 		$url_parts = wp_parse_url( $url );
 
 		$registration_data     = $this->get_registration_data();
+		$query                 = $queryParams;
 		$query['shared_key']   = $registration_data['shared'];
 		$query['token']        = uuid_v5( wp_generate_uuid4(), $url );
 		$query['website_uuid'] = $this->auth->get_site_id();
@@ -514,6 +625,15 @@ class WPML_TM_AMS_API {
 	 * @return bool
 	 */
 	public function processCopyReportConfirmation( $response ) {
+		if (
+			! is_array( $response )
+			|| ! array_key_exists(  'response', $response )
+			|| ! array_key_exists( 'code', $response[ 'response' ] )
+			|| $response[ 'response' ][ 'code' ] !== 200
+		) {
+			return false;
+		}
+
 		if ( $this->response_has_body( $response ) ) {
 			$response_body = json_decode( $response['body'], true );
 
@@ -535,8 +655,11 @@ class WPML_TM_AMS_API {
 		$user_data = array();
 
 		foreach ( $users as $user ) {
-			$wp_user     = get_user_by( 'id', $user->ID );
-			$user_data[] = $this->get_user_data( $wp_user, $with_name_details );
+			$wp_user = get_user_by( 'id', $user->ID );
+
+			if ( $wp_user ) {
+				$user_data[] = $this->get_user_data( $wp_user, $with_name_details );
+			}
 		}
 
 		return $user_data;
@@ -714,7 +837,7 @@ class WPML_TM_AMS_API {
 	 * @return array|WP_Error
 	 */
 	private function request( $method, $url, array $params = null ) {
-		$lock = $this->clonedSitesHandler->checkCloneSiteLock();
+		$lock = $this->clonedSitesHandler->checkCloneSiteLock( $url );
 		if ( $lock ) {
 			return $lock;
 		}
@@ -726,14 +849,18 @@ class WPML_TM_AMS_API {
 			FingerprintGenerator::SITE_FINGERPRINT_HEADER => $this->fingerprintGenerator->getSiteFingerprint(),
 		];
 
+		$max_execution_time = ini_get( 'max_execution_time' );
+		$timeout = $max_execution_time ? (int) $max_execution_time / 2 : 1;
+
 		$args = [
 			'method'  => $method,
 			'headers' => $headers,
-			'timeout' => max( ini_get( 'max_execution_time' ) / 2, 5 ),
+			'timeout' => (float) max( $timeout, 5 ),
 		];
 
 		if ( $params ) {
-			$args['body'] = wp_json_encode( $params, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+			$body = wp_json_encode( $params, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+			$args['body'] = $body ?: '';
 		}
 
 		$response = $this->wp_http->request( $this->add_versions_to_url( $url ), $args );
@@ -770,7 +897,9 @@ class WPML_TM_AMS_API {
 	 */
 	private function add_versions_to_url( $url ) {
 		$url_parts = wp_parse_url( $url );
+		$url_parts = $url_parts ?: [];
 		$query     = array();
+
 		if ( array_key_exists( 'query', $url_parts ) ) {
 			parse_str( $url_parts['query'], $query );
 		}
@@ -794,6 +923,16 @@ class WPML_TM_AMS_API {
 		return $this->getSignedResult(
 			'GET',
 			$this->endpoints->get_credits()
+		);
+	}
+
+	/**
+	 * @return array|WP_Error
+	 */
+	public function getAccountBalances() {
+		return $this->getSignedResult(
+			'GET',
+			$this->endpoints->get_account_balances()
 		);
 	}
 

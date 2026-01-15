@@ -11,20 +11,25 @@ use WPML\FP\Obj;
 use function WPML\FP\pipe;
 use WPML\FP\Relation;
 use WPML\Setup\Option;
+use WPML\TM\ATE\TranslateEverything;
 
 class JobActions implements \IWPML_Action {
 
 	/** @var \WPML_TM_ATE_API $apiClient */
 	private $apiClient;
 
-	public function __construct( \WPML_TM_ATE_API $apiClient ) {
-		$this->apiClient = $apiClient;
+	/** @var TranslateEverything */
+	private $translateEverything;
+
+	public function __construct( \WPML_TM_ATE_API $apiClient, TranslateEverything $translateEverything ) {
+		$this->apiClient           = $apiClient;
+		$this->translateEverything = $translateEverything;
 	}
 
 	public function add_hooks() {
 		add_action( 'wpml_tm_job_cancelled', [ $this, 'cancelJobInATE' ] );
 		add_action( 'wpml_tm_jobs_cancelled', [ $this, 'cancelJobsInATE' ] );
-		add_action( 'wpml_set_translate_everything', [ $this, 'hideJobsAfterTranslationMethodChange' ] );
+		add_action( 'wpml_set_translate_everything', [ $this, 'onTranslateEverythingModeChanged' ], 10, 2 );
 		add_action( 'wpml_update_active_languages', [ $this, 'hideJobsAfterRemoveLanguage' ] );
 	}
 
@@ -56,21 +61,40 @@ class JobActions implements \IWPML_Action {
 		$this->apiClient->cancelJobs( $getIds( $jobs ) );
 	}
 
-	public function hideJobsAfterRemoveLanguage( $oldLanguages ) {
-		$removedLanguages = Lst::diff( array_keys( $oldLanguages ), array_keys( Languages::getActive() ) );
+	/**
+	 * @param array $oldLanguages
+	 * @return void
+	 */
+	public function hideJobsAfterRemoveLanguage( $oldLanguages = [] ) {
+		$oldLanguagesArray = is_array( $oldLanguages ) ? array_keys( $oldLanguages ) : [];
+		$removedLanguages = Lst::diff( $oldLanguagesArray, array_keys( Languages::getActive() ) );
 
 		if ( $removedLanguages ) {
 			$inProgressJobsSearchParams = self::getInProgressSearch()
+											  /** @phpstan-ignore-next-line */
 			                                  ->set_target_language( array_values( $removedLanguages ) );
 
 			$this->hideJobs( $inProgressJobsSearchParams );
 
-			Fns::map( [ Option::class, 'removeLanguageFromCompleted' ], $removedLanguages );
+			$this->translateEverything->markLanguagesAsUncompleted( $removedLanguages );
 		}
 	}
 
-	public function hideJobsAfterTranslationMethodChange( $translateEverythingActive ) {
-		if ( ! $translateEverythingActive ) {
+	/**
+	 * @param $translateEverythingActive
+	 * @param array{translateExisting: boolean, 'reviewMode': string} $options
+	 *
+	 * @return void
+	 */
+	public function onTranslateEverythingModeChanged( $translateEverythingActive, $options = [] ) {
+		if ( $translateEverythingActive ) {
+			$translateExistingContent = $options['translateExisting'] ?? false;
+			if ( $translateExistingContent ) {
+				$this->translateEverything->markEverythingAsUncompleted();
+			} else {
+				$this->translateEverything->markEverythingAsCompleted();
+			}
+		} else {
 			$this->hideJobs( self::getInProgressSearch() );
 		}
 	}

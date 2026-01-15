@@ -586,34 +586,100 @@ class MMB_Installer extends MMB_Core
         return $additional_updates;
     }
 
+    /**
+     * Check if WooCommerce requires a database update after plugin upgrade.
+     * 
+     * Uses WooCommerce's official API when available, with fallbacks for compatibility.
+     *
+     * @return bool
+     */
     private function has_woocommerce_db_update()
     {
+        // Method 1: Use WooCommerce's official API (WC 3.0+)
+        // This is the most reliable method as it uses WC's internal migration list
+        if (class_exists('WC_Install') && method_exists('WC_Install', 'needs_db_update')) {
+            return \WC_Install::needs_db_update();
+        }
+
+        // Method 2: Fallback - Compare db_version with plugin version
         $current_db_version = get_option('woocommerce_db_version', null);
-        $current_wc_version = get_option('woocommerce_version');
-        if (version_compare($current_wc_version, '3.0.0', '<')) {
+        $current_wc_version = get_option('woocommerce_version', null);
+
+        if (is_null($current_db_version) || is_null($current_wc_version)) {
+            return false;
+        }
+
+        // If db version is lower than plugin version, update is likely needed
+        if (version_compare($current_db_version, $current_wc_version, '<')) {
             return true;
         }
 
+        // Method 3: Legacy fallback - parse WC install file (for edge cases)
         $latestUpdate = $this->get_wc_db_latest_update();
+        if (!is_null($latestUpdate)) {
+            return version_compare($current_db_version, $latestUpdate, '<');
+        }
 
-        return !is_null($current_db_version) && !is_null($latestUpdate) &&
-            version_compare($current_db_version, $latestUpdate, '<');
+        return false;
     }
 
+    /**
+     * Get the latest database update version from WooCommerce's install file.
+     * 
+     * This is a legacy fallback method. Prefer using WC_Install::needs_db_update().
+     *
+     * @return string|null
+     */
     private function get_wc_db_latest_update()
     {
-        $regexp   = "{'(\d+\.)(\d+\.)(\d+)'}"; // version in single quote '1.0.0', '2.1.3', '3.1.22' etc
-        $fileName = WP_PLUGIN_DIR.'/woocommerce/includes/class-wc-install.php';
-
-        if (file_exists($fileName)) {
-            $fileContent = file_get_contents($fileName);
-            preg_match_all($regexp, $fileContent, $matches);
-
-            if (!empty($matches[0])) {
-                $latestUpdate = trim(end($matches[0]), "'");
-                return $latestUpdate;
+        // Try to get from WC_Install class directly (most reliable)
+        if (class_exists('WC_Install')) {
+            try {
+                $reflection = new \ReflectionClass('WC_Install');
+                if ($reflection->hasProperty('db_update_callbacks')) {
+                    $property = $reflection->getProperty('db_update_callbacks');
+                    $property->setAccessible(true);
+                    $callbacks = $property->getValue();
+                    
+                    if (!empty($callbacks) && is_array($callbacks)) {
+                        $versions = array_keys($callbacks);
+                        usort($versions, function($a, $b) {
+                            return version_compare($a, $b);
+                        });
+                        return end($versions);
+                    }
+                }
+            } catch (\ReflectionException $e) {
+                // Fall through to legacy method if reflection fails
+            } catch (\Exception $e) {
+                // Catch any other unexpected errors and fall through to legacy method
             }
         }
+
+        // Legacy: Parse the install file (kept for backward compatibility)
+        $fileName = WP_PLUGIN_DIR . '/woocommerce/includes/class-wc-install.php';
+
+        if (!file_exists($fileName)) {
+            return null;
+        }
+
+        $fileContent = file_get_contents($fileName);
+        if ($fileContent === false) {
+            return null;
+        }
+
+        // Look for db_update_callbacks array and extract versions
+        // Pattern matches: 'X.X.X' => array( or 'X.X.X' => [
+        $regexp = "/['\"](\d+\.\d+\.\d+)['\"]\\s*=>\\s*(?:array\\s*\\(|\\[)/";
+        
+        if (preg_match_all($regexp, $fileContent, $matches) && !empty($matches[1])) {
+            $versions = $matches[1];
+            usort($versions, function($a, $b) {
+                return version_compare($a, $b);
+            });
+            return end($versions);
+        }
+
         return null;
     }
 

@@ -4,14 +4,17 @@
       "messages": {
          "": {
             "domain": "messages",
-            "plural_forms": "nplurals=2; plural=(n != 1);",
-            "lang": "en"
+            "plural_forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "pl_PL"
          },
          "Choose the image file type for flags": [
             "Wybierz typ plików obrazu dla flag"
          ],
          "This option affects only the built-in WPML flags, not the custom uploaded ones.": [
             "Ta opcja dotyczy wyłącznie wbudowanych flag WPML, a nie przesłanych flag niestandardowych."
+         ],
+         "%s format": [
+            "%s format"
          ],
          "Save": [
             "Zapisz"

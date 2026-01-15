@@ -201,6 +201,18 @@ class Api extends Rest_Controller {
 				),
 			)
 		);
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/notices/pageviews_overage_notice',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'dismiss_pageviews_overage_notice' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+			)
+		);
 	}
 	/**
 	 * Get a collection of items.
@@ -360,6 +372,19 @@ class Api extends Rest_Controller {
 		);
 
 		return rest_ensure_response( $response_data );
+	}
+
+	/**
+	 * Dismiss the pageviews overage notice.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function dismiss_pageviews_overage_notice( $request ) {
+		$expiry = $request->get_param( 'expiry' );
+		$notice = Notice::get_instance();
+		$notice->dismiss( 'pageviews_overage_notice', $expiry );
+		return rest_ensure_response( array( 'success' => true ) );
 	}
 
 	/**

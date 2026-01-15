@@ -13,3 +13,9 @@
   font-size: 13px;
   font-weight: 400;
 }
+.tooltip-date-label {
+  color: #C7CADE;
+}
+.tooltip-extra-pageviews {
+  color: #B3DED0;
+}

@@ -10,7 +10,7 @@ function icl_upgrade_2_0_0_steps( $step, $stepper ) {
 	$default_language = $sitepress->get_default_language();
 
 	define( 'ICL_TM_DISABLE_ALL_NOTIFICATIONS', true ); // make sure no notifications are being sent
-	ini_set( 'max_execution_time', 300 );
+	ini_set( 'max_execution_time', '300' );
 
 	$post_types = array_keys( $wp_post_types );
 	foreach ( $post_types as $pt ) {
@@ -171,12 +171,11 @@ function icl_upgrade_2_0_0_steps( $step, $stepper ) {
 									'needs_update'        => $needs_update,
 									'md5'                 => $md5,
 									'translation_service' => $service,
-									'translation_package' => serialize( $translation_package ),
 									'links_fixed'         => intval( isset( $links_fixed ) ? $links_fixed : 0 ),
 								)
 							);
 
-							$job_id = $TranslationManagement->add_translation_job( $newrid, $translator_id, $translation_package );
+							$job_id = wpml_tm_add_translation_job( $newrid, $translator_id, $translation_package, [] );
 							if ( $job_id && $status == 10 ) {
 								do_action( 'wpml_save_job_fields_from_post', $job_id );
 							}

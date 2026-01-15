@@ -37,7 +37,7 @@ class WPML_Translations extends WPML_SP_User {
 	 */
 	public function get_translations( $trid, $wpml_element_type, $skipPrivilegeChecking = false ) {
 		$cache_key_args = array_filter( array( $trid, $wpml_element_type, $this->skip_empty, $this->all_statuses, $this->skip_recursions ) );
-		$cache_key      = md5( wp_json_encode( $cache_key_args ) );
+		$cache_key      = md5( (string) wp_json_encode( $cache_key_args ) );
 		$cache_found    = false;
 
 		$temp_elements = $this->wpml_cache->get( $cache_key, $cache_found );
@@ -243,7 +243,7 @@ class WPML_Translations extends WPML_SP_User {
 		if ( ! $this->all_statuses && 'post_attachment' !== $element_type && ! is_admin() ) {
 			$public_statuses_where = $this->get_public_statuses();
 			// the current user may not be the admin but may have read private post/page caps!
-			if ( current_user_can( 'read_private_pages' ) || current_user_can( 'read_private_posts' ) || $skipPrivilegeChecking ) {
+			if ( ( defined( 'WP_CLI' ) && WP_CLI ) || current_user_can( 'read_private_pages' ) || current_user_can( 'read_private_posts' ) || $skipPrivilegeChecking ) {
 				$sql_parts['where'][] = ' AND (p.post_status IN (' . $public_statuses_where . ", 'draft', 'private', 'pending' ))";
 			} else {
 				$sql_parts['where'][] = ' AND (';
