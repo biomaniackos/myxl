@@ -23,18 +23,6 @@
   },
   "repositories": [
     {
-      "type": "package",
-      "package": {
-        "name": "private-plugin/gravityforms",
-        "type": "wordpress-plugin",
-        "version": "2.8.0",
-        "dist": {
-          "url": "https://www.gravityhelp.com/wp-content/plugins/gravitymanager/api.php?op=download&slug=gravityforms&key=TA_CLE_DE_LICENCE",
-          "type": "zip"
-        }
-      }
-    },
-    {
       "type": "composer",
       "url": "https://wpackagist.org",
       "only": [
@@ -120,18 +108,6 @@
     {
       "type": "package",
       "package": {
-        "name": "private-plugin/wpml-gravity-forms-mutlilingual",
-        "version": "1.6.1",
-        "type": "wordpress-plugin",
-        "dist": {
-          "type": "zip",
-          "url": "https://wpml.org/?download=8882&user_id=19339&subscription_key=$P$BoT/TYcBmtr2EQ.mqLNCbBSpDuhb3&t=1630069032&version=1.6.1"
-        }
-      }
-    },
-    {
-      "type": "package",
-      "package": {
         "name": "private-plugin/wpml-advanced-custom-fields-mutlilingual",
         "version": "1.8.2",
         "type": "wordpress-plugin",
@@ -162,18 +138,6 @@
         "dist": {
           "type": "zip",
           "url": "https://www.admincolumns.com/?command=download&subscription_key=c78e5423-7cf8-4221-924e-f51116941b72&product_key=ac-addon-acf&version=2.6.4"
-        }
-      }
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "private-plugin/addon-gravity-forms",
-        "version": "1.0.2",
-        "type": "wordpress-plugin",
-        "dist": {
-          "type": "zip",
-          "url": "https://www.admincolumns.com/?command=download&subscription_key=c78e5423-7cf8-4221-924e-f51116941b72&product_key=ac-addon-gravityforms&version=1.0.2"
         }
       }
     },
@@ -211,7 +175,6 @@
     "private-plugin/wp-rocket": "^3.9",
     "private-plugin/wpml-advanced-custom-fields-mutlilingual": "^1.8",
     "private-plugin/wpml-cms-navigation": "^1.5",
-    "private-plugin/wpml-gravity-forms-mutlilingual": "^1.6",
     "private-plugin/wpml-media-translation": "^2.6",
     "private-plugin/wpml-multilingual-cms": "^4.4",
     "private-plugin/wpml-sticky-links": "^1.5",
@@ -234,7 +197,8 @@
     "wpackagist-plugin/tinymce-advanced": "^5.6",
     "wpackagist-plugin/wordpress-seo": "^18.0",
     "wpackagist-plugin/worker": "^4.9",
-    "wpackagist-plugin/wp-mail-smtp": "^3.4"
+    "wpackagist-plugin/wp-mail-smtp": "^3.4",
+    "wpackagist-plugin/contact-form-7": "^5.9"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
