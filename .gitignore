@@ -86,3 +86,14 @@ coverage/
 *.bak
 *.old
 *.orig
+
+# Bedrock generated
+/web/app/plugins/*
+!/web/app/plugins/.gitkeep
+
+# Allow mu-plugins index if needed
+/web/app/mu-plugins/*
+!/web/app/mu-plugins/.gitkeep
+
+git status --ignored
+
